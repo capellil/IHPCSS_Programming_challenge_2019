@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg" xmlns:bx="https://boxy-svg.com">
+  <defs>
+    <linearGradient id="gradient-1" gradientUnits="userSpaceOnUse" x1="58.467" y1="65.783" x2="58.467" y2="75.783" gradientTransform="matrix(0, -16.864178, 16.864178, 0, -1094.644775, 1175.997925)">
+      <stop offset="0" style="stop-color: rgb(220, 255, 101);"/>
+      <stop offset="1" style="stop-color: rgb(255, 111, 111);"/>
+    </linearGradient>
+    <linearGradient id="gradient-2" gradientUnits="userSpaceOnUse" x1="58.467" y1="65.783" x2="58.467" y2="75.783" gradientTransform="matrix(0, -16.864178, 16.864178, 0, -1094.644775, 1175.997925)">
+      <stop offset="0" style="stop-color: rgb(220, 255, 101);"/>
+      <stop offset="1" style="stop-color: rgb(255, 111, 111);"/>
+    </linearGradient>
+  </defs>
+  <g transform="matrix(2, 0, 0, 2, 50, 50)">
+    <title>Temperatures</title>
+    <rect width="190" height="190" style="fill: rgb(220, 255, 101);">
+      <title>Initial heat</title>
+    </rect>
+    <rect width="200" height="10" y="190" style="fill: url(#gradient-1);" bx:origin="0 0.5">
+      <title>Border heat</title>
+    </rect>
+    <rect width="200" height="10" y="190" style="fill: url(#gradient-2);" transform="matrix(0, 1, -1, 0, 390, 0)" bx:origin="0 0.5">
+      <title>Border heat</title>
+    </rect>
+    <g>
+      <title>Grid</title>
+      <rect style="fill: none; stroke: rgb(0, 0, 0);" width="200" height="10"/>
+      <rect style="fill: none; stroke: rgb(0, 0, 0);" width="200" height="10" y="10" bx:origin="0 0.5"/>
+      <rect style="fill: none; stroke: rgb(0, 0, 0);" width="200" height="10" y="20"/>
+      <rect style="fill: none; stroke: rgb(0, 0, 0);" width="200" height="10" y="30" bx:origin="0 0.5"/>
+      <rect style="fill: none; stroke: rgb(0, 0, 0);" width="200" height="10" y="40"/>
+      <rect style="fill: none; stroke: rgb(0, 0, 0);" width="200" height="10" y="50" bx:origin="0 0.5"/>
+      <rect style="fill: none; stroke: rgb(0, 0, 0);" width="200" height="10" y="60"/>
+      <rect style="fill: none; stroke: rgb(0, 0, 0);" width="200" height="10" y="70" bx:origin="0 0.5"/>
+      <rect style="fill: none; stroke: rgb(0, 0, 0);" width="200" height="10" y="80"/>
+      <rect style="fill: none; stroke: rgb(0, 0, 0);" width="200" height="10" y="90" bx:origin="0 0.5"/>
+      <rect style="fill: none; stroke: rgb(0, 0, 0);" width="200" height="10" y="100"/>
+      <rect style="fill: none; stroke: rgb(0, 0, 0);" width="200" height="10" y="110" bx:origin="0 0.5"/>
+      <rect style="fill: none; stroke: rgb(0, 0, 0);" width="200" height="10" y="120"/>
+      <rect style="fill: none; stroke: rgb(0, 0, 0);" width="200" height="10" y="130" bx:origin="0 0.5"/>
+      <rect style="fill: none; stroke: rgb(0, 0, 0);" width="200" height="10" y="140"/>
+      <rect style="fill: none; stroke: rgb(0, 0, 0);" width="200" height="10" y="150" bx:origin="0 0.5"/>
+      <rect style="fill: none; stroke: rgb(0, 0, 0);" width="200" height="10" y="160"/>
+      <rect style="fill: none; stroke: rgb(0, 0, 0);" width="200" height="10" y="170" bx:origin="0 0.5"/>
+      <rect style="fill: none; stroke: rgb(0, 0, 0);" width="200" height="10" y="180"/>
+      <rect style="fill: none; stroke: rgb(0, 0, 0);" width="200" height="10" y="190" bx:origin="0 0.5"/>
+      <rect style="fill: none; stroke: rgb(0, 0, 0);" width="10" height="200" bx:origin="0 0.5"/>
+      <rect style="fill: none; stroke: rgb(0, 0, 0);" width="10" height="200" x="10" bx:origin="0 0.5"/>
+      <rect style="fill: none; stroke: rgb(0, 0, 0);" width="10" height="200" x="20" bx:origin="0 0.5"/>
+      <rect style="fill: none; stroke: rgb(0, 0, 0);" width="10" height="200" x="30" bx:origin="0 0.5"/>
+      <rect style="fill: none; stroke: rgb(0, 0, 0);" width="10" height="200" x="40" bx:origin="0 0.5"/>
+      <rect style="fill: none; stroke: rgb(0, 0, 0);" width="10" height="200" x="50" bx:origin="0 0.5"/>
+      <rect style="fill: none; stroke: rgb(0, 0, 0);" width="10" height="200" x="60" bx:origin="0 0.5"/>
+      <rect style="fill: none; stroke: rgb(0, 0, 0);" width="10" height="200" x="70" bx:origin="0 0.5"/>
+      <rect style="fill: none; stroke: rgb(0, 0, 0);" width="10" height="200" x="80" bx:origin="0 0.5"/>
+      <rect style="fill: none; stroke: rgb(0, 0, 0);" width="10" height="200" x="90" bx:origin="0 0.5"/>
+      <rect style="fill: none; stroke: rgb(0, 0, 0);" width="10" height="200" x="100" bx:origin="0 0.5"/>
+      <rect style="fill: none; stroke: rgb(0, 0, 0);" width="10" height="200" x="110" bx:origin="0 0.5"/>
+      <rect style="fill: none; stroke: rgb(0, 0, 0);" width="10" height="200" x="120" bx:origin="0 0.5"/>
+      <rect style="fill: none; stroke: rgb(0, 0, 0);" width="10" height="200" x="130" bx:origin="0 0.5"/>
+      <rect style="fill: none; stroke: rgb(0, 0, 0);" width="10" height="200" x="140" bx:origin="0 0.5"/>
+      <rect style="fill: none; stroke: rgb(0, 0, 0);" width="10" height="200" x="150" bx:origin="0 0.5"/>
+      <rect style="fill: none; stroke: rgb(0, 0, 0);" width="10" height="200" x="160" bx:origin="0 0.5"/>
+      <rect style="fill: none; stroke: rgb(0, 0, 0);" width="10" height="200" x="170" bx:origin="0 0.5"/>
+      <rect style="fill: none; stroke: rgb(0, 0, 0);" width="10" height="200" x="180" bx:origin="0 0.5"/>
+      <rect style="fill: none; stroke: rgb(0, 0, 0);" width="10" height="200" x="190" bx:origin="0 0.5"/>
+      <rect style="fill: none; stroke: rgb(0, 0, 0); stroke-linecap: round; stroke-linejoin: round; stroke-width: 3px;" width="180" height="180" x="10" y="10"/>
+    </g>
+  </g>
+  <text style="fill: rgb(145, 183, 19); font-size: 24px; white-space: pre;" x="25.014" y="46.563">0°</text>
+  <text style="fill: rgb(145, 183, 19); font-size: 24px; white-space: pre;" x="25.014" y="479.283">0°</text>
+  <text style="fill: rgb(145, 183, 19); font-size: 24px; white-space: pre;" x="460.984" y="48.697">0°</text>
+  <text style="fill: rgb(201, 0, 0); font-size: 24px; white-space: pre;" x="436.74" y="479.292">100°</text>
+</svg>
