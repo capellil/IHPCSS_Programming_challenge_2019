@@ -21,16 +21,16 @@ int main()
 	// Used to iterate through columns.
 	unsigned int j;
 	// Current iteration.
-	unsigned int iteration=1;
+	unsigned int iteration = 1;
 	// Largest change in temperature. 
-	double dt=100;
+	double dt = 100;
 
 	///////////////////////////////////
 	// -- Code from here is timed -- //
 	///////////////////////////////////
 	start_timer(&timer_simulation);
 
-	// Initialise_temperatures Temp_last including boundary conditions
+	// Initialise temperature and temperature_last arrays including boundary conditions
 	initialise_temperatures();				   
 
 	// Do until error is under threshold or until max iterations is reached
@@ -44,8 +44,10 @@ int main()
 		{
 			for(j = 1; j <= COLUMNS; j++)
 			{
-				temperature[i][j] = 0.25 * (temperature_last[i+1][j  ] + temperature_last[i-1][j  ] +
-											temperature_last[i  ][j+1] + temperature_last[i  ][j-1]);
+				temperature[i][j] = 0.25 * (temperature_last[i+1][j  ] +
+											temperature_last[i-1][j  ] +
+											temperature_last[i  ][j+1] +
+											temperature_last[i  ][j-1]);
 			}
 		}
 
@@ -54,7 +56,7 @@ int main()
 		{
 			for(j = 1; j <= COLUMNS; j++)
 			{
-				dt = fmax(fabs(temperature[i][j]-temperature_last[i][j]), dt);
+				dt = fmax(fabs(temperature[i][j] - temperature_last[i][j]), dt);
 				temperature_last[i][j] = temperature[i][j];
 			}
 		}
