@@ -26,7 +26,6 @@ double timer_simulation;
 
 /**
  * @brief Initialises the temperatures.
- * @todo Initialises the array "temperature" as well? In case of non-blocking etc... one may encounter a problem of uninitialised values.
  * @details Initialises the temperature_last array, which is used for the first iteration.
  **/
 void initialise_temperatures();
