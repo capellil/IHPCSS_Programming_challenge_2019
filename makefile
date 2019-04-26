@@ -1,6 +1,7 @@
 SRC_DIRECTORY=src
 BIN_DIRECTORY=bin
 DOC_DIRECTORY=doc
+SERIAL_DIRECTORY=serial
 
 CC=gcc
 CFLAGS=-O3 -lm -Wall -Wextra
@@ -14,9 +15,9 @@ quick_compile: create_directories serial
 ################
 # ACTUAL CODES #
 ################
-serial: $(SRC_DIRECTORY)/serial.c $(SRC_DIRECTORY)/util.c
+serial: $(SRC_DIRECTORY)/$(SERIAL_DIRECTORY)/serial.c $(SRC_DIRECTORY)/util.c
 	@echo "Compiling serial version: \c";
-	$(CC) -o $(BIN_DIRECTORY)/serial $(SRC_DIRECTORY)/serial.c $(SRC_DIRECTORY)/util.c $(CFLAGS)
+	$(CC) -o $(BIN_DIRECTORY)/serial $(SRC_DIRECTORY)/$(SERIAL_DIRECTORY)/serial.c $(SRC_DIRECTORY)/util.c $(CFLAGS)
 
 #############
 # UTILITIES #
