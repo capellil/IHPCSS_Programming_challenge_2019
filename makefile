@@ -29,11 +29,11 @@ print_serial_compilation:
 
 serial_small: $(SRC_DIRECTORY)/serial.c $(SRC_DIRECTORY)/util.c
 	@echo "    - Test version ($(SMALL_ROWS)x$(SMALL_COLUMNS))\n        \c";
-	$(CC) -o $(BIN_DIRECTORY)/serial_small $(SRC_DIRECTORY)/serial.c $(SRC_DIRECTORY)/util.c $(CFLAGS) -DROWS=$(SMALL_ROWS) -DCOLUMNS=$(SMALL_COLUMNS) -DVERSION_RUN=\"SERIAL_SMALL\"
+	$(CC) -o $(BIN_DIRECTORY)/serial_small $(SRC_DIRECTORY)/serial.c $(SRC_DIRECTORY)/util.c $(CFLAGS) -DROWS=$(SMALL_ROWS) -DCOLUMNS=$(SMALL_COLUMNS) -DVERSION_RUN=\"serial_small\"
 
 serial_big: $(SRC_DIRECTORY)/serial.c $(SRC_DIRECTORY)/util.c
 	@echo "    - Challenge version ($(BIG_ROWS)x$(BIG_COLUMNS))\n        \c";
-	$(CC) -o $(BIN_DIRECTORY)/serial_big $(SRC_DIRECTORY)/serial.c $(SRC_DIRECTORY)/util.c $(CFLAGS) -DROWS=$(BIG_ROWS) -DCOLUMNS=$(BIG_COLUMNS) -DVERSION_RUN=\"SERIAL_BIG\"
+	$(CC) -o $(BIN_DIRECTORY)/serial_big $(SRC_DIRECTORY)/serial.c $(SRC_DIRECTORY)/util.c $(CFLAGS) -DROWS=$(BIG_ROWS) -DCOLUMNS=$(BIG_COLUMNS) -DVERSION_RUN=\"serial_big\"
 
 #############
 # UTILITIES #
