@@ -1,23 +1,39 @@
 SRC_DIRECTORY=src
 BIN_DIRECTORY=bin
 DOC_DIRECTORY=doc
-SERIAL_DIRECTORY=serial
+
+SMALL_ROWS=672
+SMALL_COLUMNS=672
+
+BIG_ROWS=10572
+BIG_COLUMNS=10572
 
 CC=gcc
 CFLAGS=-O3 -lm -Wall -Wextra
 
-default: clear_screen quick_compile
+default: help quick_compile
 
-all: clear_screen documentation quick_compile 
+all: help documentation quick_compile 
 
-quick_compile: create_directories serial
+quick_compile: create_directories serial_versions
 
 ################
-# ACTUAL CODES #
+# SERIAL CODES #
 ################
-serial: $(SRC_DIRECTORY)/$(SERIAL_DIRECTORY)/serial.c $(SRC_DIRECTORY)/util.c
-	@echo "Compiling serial version: \c";
-	$(CC) -o $(BIN_DIRECTORY)/serial $(SRC_DIRECTORY)/$(SERIAL_DIRECTORY)/serial.c $(SRC_DIRECTORY)/util.c $(CFLAGS)
+serial_versions: print_serial_compilation serial_small serial_big
+
+print_serial_compilation:
+	@echo "\n/////////////////////////////"; \
+	 echo "// COMPILING SERIAL CODES //"; \
+	 echo "///////////////////////////";
+
+serial_small: $(SRC_DIRECTORY)/serial.c $(SRC_DIRECTORY)/util.c
+	@echo "    - Test version ($(SMALL_ROWS)x$(SMALL_COLUMNS))\n        \c";
+	$(CC) -o $(BIN_DIRECTORY)/serial_small $(SRC_DIRECTORY)/serial.c $(SRC_DIRECTORY)/util.c $(CFLAGS) -DROWS=$(SMALL_ROWS) -DCOLUMNS=$(SMALL_COLUMNS) -DVERSION_RUN=\"SERIAL_SMALL\"
+
+serial_big: $(SRC_DIRECTORY)/serial.c $(SRC_DIRECTORY)/util.c
+	@echo "    - Challenge version ($(BIG_ROWS)x$(BIG_COLUMNS))\n        \c";
+	$(CC) -o $(BIN_DIRECTORY)/serial_big $(SRC_DIRECTORY)/serial.c $(SRC_DIRECTORY)/util.c $(CFLAGS) -DROWS=$(BIG_ROWS) -DCOLUMNS=$(BIG_COLUMNS) -DVERSION_RUN=\"SERIAL_BIG\"
 
 #############
 # UTILITIES #
@@ -25,18 +41,30 @@ serial: $(SRC_DIRECTORY)/$(SERIAL_DIRECTORY)/serial.c $(SRC_DIRECTORY)/util.c
 create_directories:
 	@if [ ! -d $(BIN_DIRECTORY) ]; then mkdir $(BIN_DIRECTORY); fi 
 
-clear_screen:
-	@clear
+help:
+	@clear; \
+	echo "Quick help: "; \
+	echo "    - To generate the documentation, please issue 'make documentation'."; \
+	echo "    - To delete all binaries generated, please issue 'make clean'."; \
+	echo "------------------------------------------------------------------------------------";
 
-clean:
-	@rm -rf $(BIN_DIRECTORY) $(DOC_DIRECTORY);
+clean: help
+	@echo "\n////////////////////////";
+	@echo "// CLEANING BINARIES //";
+	@echo "//////////////////////";
+	rm -rf $(BIN_DIRECTORY);
 
-documentation:
-	@echo "Generating doxygen... \c"; \
-	doxygen > /dev/null 2>&1; \
-	echo "done"; \
-	echo "Compiling latex... \c"; \
-	cd $(DOC_DIRECTORY)/latex; \
-	make > /dev/null 2>&1; \
-	cd ../..; \
-	echo "done"; \
+documentation: help
+	@echo "\n///////////////////////////////";
+	@echo "// GENERATING DOCUMENTATION //";
+	@echo "/////////////////////////////";
+	@echo "    - Generating doxygen... \c"; \
+	 doxygen > /dev/null 2>&1; \
+	 echo "done"; \
+	 echo "    - Compiling latex... \c"; \
+	 cd $(DOC_DIRECTORY)/latex; \
+	 make > /dev/null 2>&1; \
+	 cd ../..; \
+	 echo "done"; \
+	 echo "    - The HTML documentation is available in 'doc/html/index.xhtml'."; \
+	 echo "    - The PDF documentation is available in 'doc/latex/refman.pdf'."

@@ -33,53 +33,61 @@ clear
 
 # Check the number of parameters passed
 if [ "$#" -eq "1" ]; then
-	echo_success "Correct number of arguments received. File to verify \"$1\"."
+	echo_success "Correct number of arguments received; file to verify is \"$1\"."
 else
-	echo_failure "Wrong number of arguments, just pass the file you want to verify."
-fi
-
-# Check the reference file exists
-reference_file="output/serial.txt"
-if [ -f "${reference_file}" ]; then
-	echo_success "The reference file \"${reference_file}\" exists."
-else
-	echo_failure "The reference file \"${reference_file}\" does not exist."
+	echo_failure "Wrong number of arguments received: please pass the file you want to verify. Don't worry about the reference file to compare against, this script will fetch it automatically in the reference file folder."
 fi
 
 # Check the challenger file exists
 challenger_file=$1
 if [ -f "${challenger_file}" ]; then
-	echo_success "The file \"${challenger_file}\" exists."
+	echo_success "The file you passed exists."
 else
-	echo_failure "The file \"${challenger_file}\" does not exist."
+	echo_failure "The file you passed does not exist."
+fi
+
+# Get the version run
+version_run=`cat ${challenger_file} | grep "Version run" | cut -d ':' -f 2 | cut -d ' ' -f 2 | cut -d '.' -f 1`
+if [ ! -z "${version_run}" ]; then
+	echo_success "The version run has been retrieved: ${version_run}.";
+else
+	echo_failure "The version run has not been retrieved. The program should have produced a line as follows: \"Version run: X.\".";
+fi
+
+# Check the reference file exists
+reference_file="reference_outputs/${version_run}.txt"
+if [ -f "${reference_file}" ]; then
+	echo_success "The reference file \"${reference_file}\" has been retrieved."
+else
+	echo_failure "The reference file \"${reference_file}\" could not be retrieved."
 fi
 
 # Check the numbers of line match
-number_of_lines_reference=`wc -l ${reference_file} | cut -d ' ' -f 1`
-number_of_lines_challenger=`wc -l ${challenger_file} | cut -d ' ' -f 1`
+number_of_lines_reference=`cat ${reference_file} | wc -l | tr -d [:space:]`
+number_of_lines_challenger=`cat ${challenger_file} | wc -l | tr -d [:space:]`
 
 if [ "${number_of_lines_reference}" -eq "${number_of_lines_challenger}" ]; then
-	echo_success "The number of lines match; ${number_of_lines_reference} lines each."
+	echo_success "Both files have ${number_of_lines_reference} lines."
 else
-	echo_failure "The number of lines of the two files do not match; ${number_of_lines_reference} lines for the reference, ${number_of_lines_challenger} lines for the file you want to verify. Your version probably crashed mid-way, which prevented the output from completing."
+	echo_failure "The number of lines of the two files do not match; ${number_of_lines_reference} lines for the reference file, ${number_of_lines_challenger} lines for the file your file."
 fi
 
 # Check the number of iterations
 number_iterations_reference=`cat "${reference_file}" | grep "Max error at iteration" | cut -d ' ' -f 5`
 number_iterations_challenger=`cat "${challenger_file}" | grep "Max error at iteration" | cut -d ' ' -f 5`
 if [ "${number_iterations_reference}" -eq "${number_iterations_challenger}" ]; then
-	echo_success "Threshold reached in identical iteration; iteration ${number_iterations_reference} each."
+	echo_success "The temperature delta triggered the threshold at iteration ${number_iterations_reference} for both."
 else
-	echo_failure "Threshold reached in different iterations; iteration ${number_iterations_reference} for the reference file and ${number_iterations_challenger} for the file to verify."
+	echo_failure "The temperature delta triggered the threshold at different iterations; ${number_iterations_reference} for the reference file vs ${number_iterations_challenger} for the file to verify."
 fi
 
 # Check the max error
 max_error_reference=`cat "${reference_file}" | grep "Max error at iteration" | cut -d ' ' -f 7`
 max_error_challenger=`cat "${challenger_file}" | grep "Max error at iteration" | cut -d ' ' -f 7`
 if [ "${max_error_reference}" = "${max_error_challenger}" ]; then
-	echo_success "Max error identical for both versions; ${max_error_reference} for each."
+	echo_success "The final maximum change in temperature is ${max_error_reference} for both."
 else
-	echo_failure "Max error different for both versions; ${max_error_reference} for the reference file and ${max_error_challenger} for the file to verify."
+	echo_failure "The final maximum change in temperature is different for both versions; ${max_error_reference} for the reference file vs ${max_error_challenger} for the file to verify."
 fi
 
 # Compare times

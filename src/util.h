@@ -6,18 +6,14 @@
 #ifndef UTIL_H_INCLUDED
 #define UTIL_H_INCLUDED
 
-/// Number of columns in the temperature arrays
-#define COLUMNS 672
-/// Number of lines in the temperature arrays
-#define ROWS 672
-/// Largest permitted change in temperatures
+/// Largest permitted change in temp
 #define MAX_TEMP_ERROR 0.01
-/// Maximal number of iterations
+/// Max number of iterations.
 #define MAX_NUMBER_OF_ITERATIONS 4000
-/// Number of iterations between two printings
-#define ITERATION_FREQUENCY 100
+/// Number of iterations between two summary printings
+#define PRINT_FREQUENCY 100
 
-/// Temperature grid
+/// Temperature grid.
 double temperature[ROWS+2][COLUMNS+2];
 /// Temperature grid from last iteration
 double temperature_last[ROWS+2][COLUMNS+2]; 
@@ -26,25 +22,36 @@ double timer_simulation;
 
 /**
  * @brief Initialises the temperatures.
- * @details Initialises the temperature_last array, which is used for the first iteration.
+ * @details Initialises the arrays temperature and temperature_last with the original temperature grid.
+ * @note This function must NOT be altered in ANY WAY.
  **/
 void initialise_temperatures();
 /**
  * @brief Prints information used for tracking.
- * @note This function must NOT be altered in ANY WAY.
  * @param[in] iter The iteration at which printing progress.
+ * @note This function must NOT be altered in ANY WAY.
  **/
-void track_progress(int iteration);
+void track_progress(int iter);
+/**
+ * @brief Prints the time needed to complete the simulation as well as debugging information.
+ * @details In addition to printing the total simulation time, it also prints the iteration at which convergence was reached as well as the last temperature delta observed. The first one is to evaluate performance while the last two help check program correctness.
+ * @param[in] iteration The iteration at which the simulation stopped.
+ * @param[in] dt The temperature delta when the simulation stopped.
+ * @param[in] timer_simulation The timer containing the amount of time elapsed during the simulation calculations.
+ **/
+void print_summary(int iteration, double dt, double timer_simulation);
 /**
  * @brief Begins the timer.
  * @details This function initialises the timer given.
  * @param[out] timer The timer to start.
+ * @note This function must NOT be altered in ANY WAY.
  **/
 void start_timer(double* timer);
 /**
  * @brief Ends the timer.
  * @param[inout] timer The timer to stop.
  * @post \p timer contains the time elapsed between the call to start_timer() and stop_timer().
+ * @note This function must NOT be altered in ANY WAY.
  **/
 void stop_timer(double* timer);
 
