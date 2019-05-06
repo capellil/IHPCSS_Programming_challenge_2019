@@ -2,20 +2,27 @@ SRC_DIRECTORY=src
 BIN_DIRECTORY=bin
 DOC_DIRECTORY=doc
 
-SMALL_ROWS=672
+SMALL_ROWS=168
+SMALL_ROWS_GLOBAL=672
 SMALL_COLUMNS=672
+SMALL_DEFINES=-DROWS=$(SMALL_ROWS_GLOBAL) -DROWS_GLOBAL=$(SMALL_ROWS_GLOBAL) -DCOLUMNS=$(SMALL_COLUMNS)
+SMALL_DEFINES_MPI=-DROWS=$(SMALL_ROWS) -DROWS_GLOBAL=$(SMALL_ROWS_GLOBAL) -DCOLUMNS=$(SMALL_COLUMNS)
 
-BIG_ROWS=10572
-BIG_COLUMNS=10572
+BIG_ROWS=96
+BIG_ROWS_GLOBAL=10752
+BIG_COLUMNS=10752
+BIG_DEFINES=-DROWS=$(BIG_ROWS_GLOBAL) -DROWS_GLOBAL=$(BIG_ROWS_GLOBAL) -DCOLUMNS=$(BIG_COLUMNS)
+BIG_DEFINES_MPI=-DROWS=$(BIG_ROWS) -DROWS_GLOBAL=$(BIG_ROWS_GLOBAL) -DCOLUMNS=$(BIG_COLUMNS)
 
 CC=gcc
+MPICC=mpicc
 CFLAGS=-O3 -lm -Wall -Wextra
 
 default: help quick_compile
 
 all: help documentation quick_compile 
 
-quick_compile: create_directories serial_versions
+quick_compile: create_directories serial_versions mpi_versions
 
 ################
 # SERIAL CODES #
@@ -28,12 +35,30 @@ print_serial_compilation:
 	 echo "///////////////////////////";
 
 serial_small: $(SRC_DIRECTORY)/serial.c $(SRC_DIRECTORY)/util.c
-	@echo "    - Test version ($(SMALL_ROWS)x$(SMALL_COLUMNS))\n        \c";
-	$(CC) -o $(BIN_DIRECTORY)/serial_small $(SRC_DIRECTORY)/serial.c $(SRC_DIRECTORY)/util.c $(CFLAGS) -DROWS=$(SMALL_ROWS) -DCOLUMNS=$(SMALL_COLUMNS) -DVERSION_RUN=\"serial_small\"
+	@echo "    - Test version ($(SMALL_ROWS_GLOBAL)x$(SMALL_COLUMNS))\n        \c";
+	$(CC) -o $(BIN_DIRECTORY)/serial_small $(SRC_DIRECTORY)/serial.c $(SRC_DIRECTORY)/util.c $(CFLAGS) $(SMALL_DEFINES) -DVERSION_RUN=\"serial_small\"
 
 serial_big: $(SRC_DIRECTORY)/serial.c $(SRC_DIRECTORY)/util.c
+	@echo "    - Challenge version ($(BIG_ROWS_GLOBAL)x$(BIG_COLUMNS))\n        \c";
+	$(CC) -o $(BIN_DIRECTORY)/serial_big $(SRC_DIRECTORY)/serial.c $(SRC_DIRECTORY)/util.c $(CFLAGS) $(BIG_DEFINES) -DVERSION_RUN=\"serial_big\"
+
+#############
+# MPI CODES #
+#############
+mpi_versions: print_mpi_compilation mpi_small mpi_big
+
+print_mpi_compilation:
+	@echo "\n//////////////////////////"; \
+	 echo "// COMPILING MPI CODES //"; \
+	 echo "////////////////////////";
+
+mpi_small: $(SRC_DIRECTORY)/mpi.c $(SRC_DIRECTORY)/util.c
+	@echo "    - Test version ($(SMALL_ROWS)x$(SMALL_COLUMNS))\n        \c";
+	$(MPICC) -o $(BIN_DIRECTORY)/mpi_small $(SRC_DIRECTORY)/mpi.c $(SRC_DIRECTORY)/util.c $(CFLAGS) $(SMALL_DEFINES_MPI) -DVERSION_RUN=\"mpi_small\" -DVERSION_RUN_IS_MPI
+
+mpi_big: $(SRC_DIRECTORY)/mpi.c $(SRC_DIRECTORY)/util.c
 	@echo "    - Challenge version ($(BIG_ROWS)x$(BIG_COLUMNS))\n        \c";
-	$(CC) -o $(BIN_DIRECTORY)/serial_big $(SRC_DIRECTORY)/serial.c $(SRC_DIRECTORY)/util.c $(CFLAGS) -DROWS=$(BIG_ROWS) -DCOLUMNS=$(BIG_COLUMNS) -DVERSION_RUN=\"serial_big\"
+	$(MPICC) -o $(BIN_DIRECTORY)/mpi_big $(SRC_DIRECTORY)/mpi.c $(SRC_DIRECTORY)/util.c $(CFLAGS) $(BIG_DEFINES_MPI) -DVERSION_RUN=\"mpi_big\" -DVERSION_RUN_IS_MPI
 
 #############
 # UTILITIES #
