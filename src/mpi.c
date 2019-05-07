@@ -8,7 +8,7 @@
 
 #include <stdio.h> // printf
 #include <stdlib.h> // EXIT_FAILURE
-#include <math.h> // fmax
+#include <math.h> // fabs
 #include <mpi.h> // MPI_*
 #include "util.h"  
 
@@ -21,18 +21,18 @@
 int main(int argc, char *argv[])
 {
     int iteration = 0;
-    /// Temperature change for our MPI process
+    // Temperature change for our MPI process
     double dt;
-    /// Temperature change across all MPI processes
+    // Temperature change across all MPI processes
     double dt_global = 100;
-    /// The number of MPI processes in total
+    // The number of MPI processes in total
     int comm_size;
-    /// The rank of my MPI process
+    // The rank of my MPI process
     int my_rank;
-    /// Communication tags
+    // Communication tags
     const int DOWN = 100;
     const int UP = 101 ;
-    /// Status returned by MPI calls
+    // Status returned by MPI calls
     MPI_Status status;
 
     // The usual MPI startup routines
