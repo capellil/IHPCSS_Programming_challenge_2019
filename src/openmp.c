@@ -9,6 +9,7 @@
 #include "util.h"
 #include <math.h> // fabs
 #include <stdlib.h> // EXIT_SUCCESS
+#include <omp.h>
 
 /**
  * @brief Runs the experiment.
