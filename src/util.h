@@ -38,6 +38,7 @@ void track_progress(int iter);
  * @param[in] iteration The iteration at which the simulation stopped.
  * @param[in] dt The temperature delta when the simulation stopped.
  * @param[in] timer_simulation The timer containing the amount of time elapsed during the simulation calculations.
+ * @note This function must NOT be altered in ANY WAY.
  **/
 void print_summary(int iteration, double dt, double timer_simulation);
 /**
