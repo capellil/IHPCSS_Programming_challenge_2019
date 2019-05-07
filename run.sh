@@ -10,11 +10,6 @@ function echo_bad
 	echo -e "\033[31m$1\033[0m\c"
 }
 
-function echo_info
-{
-	echo -e "\033[33m[TIMINGS]\033[0m $1"
-}
-
 function echo_success
 {
 	echo_good "[SUCCESS]"
@@ -28,7 +23,10 @@ function echo_failure
 	exit -1
 }
 
-function array_contains2
+# Function taken from Meta Stack Overflow (https://meta.stackoverflow.com)
+# Author: Glenn Jackman (profile: https://stackoverflow.com/users/7552/glenn-jackman)
+# Original article: https://stackoverflow.com/a/14367368
+function is_in_array
 { 
     local array="$1[@]"
     local seeking=$2
@@ -47,7 +45,7 @@ function array_contains2
 ######################
 clear;
 echo "Quick help:";
-echo -e "\t- This script is meant to be run as follows: './run.sh <IMPLEMENTATION> <SIZE>'";
+echo -e "\t- This script is meant to be run as follows: './run.sh IMPLEMENTATION SIZE'";
 echo -e "\t- IMPLEMENTATION = 'serial' | 'openmp' | 'mpi' | 'hybrid' | 'openacc'";
 echo -e "\t- SIZE = 'small' | 'big'";
 echo -e "\t- Example: to run the serial version on the small grid, run './run.sh serial small'.\n";
@@ -62,7 +60,7 @@ fi
 ###################################################
 implementations=("serial" "openmp" "mpi" "hybrid" "openacc");
 all_implementations=`echo ${implementations[@]}`;
-array_contains2 implementations $1
+is_in_array implementations $1
 implementation_retrieved=$?;
 if [ "${implementation_retrieved}" == "0" ]; then
 	echo_success "The implementation passed is correct.";
@@ -75,7 +73,7 @@ fi
 #########################################
 sizes=("small" "big");
 all_sizes=`echo ${sizes[@]}`;
-array_contains2 sizes $2
+is_in_array sizes $2
 size_retrieved=$?;
 if [ "${size_retrieved}" == "0" ]; then
 	echo_success "The size passed is correct.";
@@ -93,6 +91,12 @@ if [ "$1" == "mpi" ]; then
 	else
 		runner="mpirun -n 120";
 	fi
+elif [ "$1" == "openmp" ]; then
+	if [ "$2" == "small" ]; then
+		runner="OMP_NUM_THREADS=4";
+	else
+		runner="OMP_NUM_THREADS=120";
+	fi
 fi
 executable="./bin/$1_$2";
 if [ -f "${executable}" ]; then
@@ -107,4 +111,4 @@ else
 fi
 
 echo_success "Command issued to run your application: \"${command}\"";
-${command};
+eval ${command};

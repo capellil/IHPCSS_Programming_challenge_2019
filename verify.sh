@@ -10,7 +10,7 @@ function echo_bad
 	echo -e "\033[31m$1\033[0m\c"
 }
 
-function echo_info
+function echo_timing
 {
 	echo -e "\033[33m[TIMINGS]\033[0m $1"
 }
@@ -95,8 +95,8 @@ timing_reference=`cat "${reference_file}" | grep "Total time was" | cut -d ' ' -
 timing_challenger=`cat "${challenger_file}" | grep "Total time was" | cut -d ' ' -f 4`
 if [ $(bc <<< "${timing_reference} < ${timing_challenger}") -eq "1" ]; then
 	speedup_slower=$(bc <<< "scale=2; ${timing_challenger}/${timing_reference}")
-	echo_info "Your version is ${speedup_slower} times faster: ${timing_reference}s vs ${timing_challenger}s."
+	echo_timing "Your version is ${speedup_slower} times faster: ${timing_reference}s vs ${timing_challenger}s."
 else
 	speedup_faster=$(bc <<< "scale=2; ${timing_reference}/${timing_challenger}")
-	echo_info "Your version is ${speedup_faster} times faster: ${timing_reference}s vs ${timing_challenger}s."
+	echo_timing "Your version is ${speedup_faster} times faster: ${timing_reference}s vs ${timing_challenger}s."
 fi

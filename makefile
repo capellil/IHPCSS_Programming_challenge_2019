@@ -22,7 +22,7 @@ default: help quick_compile
 
 all: help documentation quick_compile 
 
-quick_compile: create_directories serial_versions mpi_versions
+quick_compile: create_directories serial_versions openmp_versions mpi_versions
 
 ################
 # SERIAL CODES #
@@ -41,6 +41,24 @@ serial_small: $(SRC_DIRECTORY)/serial.c $(SRC_DIRECTORY)/util.c
 serial_big: $(SRC_DIRECTORY)/serial.c $(SRC_DIRECTORY)/util.c
 	@echo "    - Challenge version ($(BIG_ROWS_GLOBAL)x$(BIG_COLUMNS))\n        \c";
 	$(CC) -o $(BIN_DIRECTORY)/serial_big $(SRC_DIRECTORY)/serial.c $(SRC_DIRECTORY)/util.c $(CFLAGS) $(BIG_DEFINES) -DVERSION_RUN=\"serial_big\"
+
+################
+# OPENMP CODES #
+################
+openmp_versions: print_openmp_compilation openmp_small openmp_big
+
+print_openmp_compilation:
+	@echo "\n/////////////////////////////"; \
+	 echo "// COMPILING OPENMP CODES //"; \
+	 echo "///////////////////////////";
+
+openmp_small: $(SRC_DIRECTORY)/openmp.c $(SRC_DIRECTORY)/util.c
+	@echo "    - Test version ($(SMALL_ROWS_GLOBAL)x$(SMALL_COLUMNS))\n        \c";
+	$(CC) -o $(BIN_DIRECTORY)/openmp_small $(SRC_DIRECTORY)/openmp.c $(SRC_DIRECTORY)/util.c $(CFLAGS) $(SMALL_DEFINES) -DVERSION_RUN=\"openmp_small\" -fopenmp
+
+openmp_big: $(SRC_DIRECTORY)/openmp.c $(SRC_DIRECTORY)/util.c
+	@echo "    - Challenge version ($(BIG_ROWS_GLOBAL)x$(BIG_COLUMNS))\n        \c";
+	$(CC) -o $(BIN_DIRECTORY)/openmp_big $(SRC_DIRECTORY)/openmp.c $(SRC_DIRECTORY)/util.c $(CFLAGS) $(BIG_DEFINES) -DVERSION_RUN=\"openmp_big\" -fopenmp
 
 #############
 # MPI CODES #
