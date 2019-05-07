@@ -1,6 +1,6 @@
 # IHPCSS Challenge #
 
-You are taking part to the [International High-Performance Computing Summer School](http://ihpcss18.it4i.cz/) coding challenge? That's where it starts!
+You are taking part to the [International High-Performance Computing Summer School](https://ss19.ihpcss.org) coding challenge? That's where it starts!
 
 ## What is the challenge? ##
 
