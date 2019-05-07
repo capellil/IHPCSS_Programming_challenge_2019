@@ -16,7 +16,7 @@ BIG_DEFINES_MPI=-DROWS=$(BIG_ROWS) -DROWS_GLOBAL=$(BIG_ROWS_GLOBAL) -DCOLUMNS=$(
 
 CC=gcc
 MPICC=mpicc
-CFLAGS=-O3 -lm -Wall -Wextra
+CFLAGS=-std=c99 -O3 -lm -Wall -Wextra
 
 default: help quick_compile
 
@@ -30,16 +30,16 @@ quick_compile: create_directories serial_versions openmp_versions mpi_versions
 serial_versions: print_serial_compilation serial_small serial_big
 
 print_serial_compilation:
-	@echo "\n/////////////////////////////"; \
+	@echo -e "\n/////////////////////////////"; \
 	 echo "// COMPILING SERIAL CODES //"; \
 	 echo "///////////////////////////";
 
 serial_small: $(SRC_DIRECTORY)/serial.c $(SRC_DIRECTORY)/util.c
-	@echo "    - Test version ($(SMALL_ROWS_GLOBAL)x$(SMALL_COLUMNS))\n        \c";
+	@echo -e "    - Test version ($(SMALL_ROWS_GLOBAL)x$(SMALL_COLUMNS))\n        \c";
 	$(CC) -o $(BIN_DIRECTORY)/serial_small $(SRC_DIRECTORY)/serial.c $(SRC_DIRECTORY)/util.c $(CFLAGS) $(SMALL_DEFINES) -DVERSION_RUN=\"serial_small\"
 
 serial_big: $(SRC_DIRECTORY)/serial.c $(SRC_DIRECTORY)/util.c
-	@echo "    - Challenge version ($(BIG_ROWS_GLOBAL)x$(BIG_COLUMNS))\n        \c";
+	@echo -e "    - Challenge version ($(BIG_ROWS_GLOBAL)x$(BIG_COLUMNS))\n        \c";
 	$(CC) -o $(BIN_DIRECTORY)/serial_big $(SRC_DIRECTORY)/serial.c $(SRC_DIRECTORY)/util.c $(CFLAGS) $(BIG_DEFINES) -DVERSION_RUN=\"serial_big\"
 
 ################
@@ -48,16 +48,16 @@ serial_big: $(SRC_DIRECTORY)/serial.c $(SRC_DIRECTORY)/util.c
 openmp_versions: print_openmp_compilation openmp_small openmp_big
 
 print_openmp_compilation:
-	@echo "\n/////////////////////////////"; \
+	@echo -e "\n/////////////////////////////"; \
 	 echo "// COMPILING OPENMP CODES //"; \
 	 echo "///////////////////////////";
 
 openmp_small: $(SRC_DIRECTORY)/openmp.c $(SRC_DIRECTORY)/util.c
-	@echo "    - Test version ($(SMALL_ROWS_GLOBAL)x$(SMALL_COLUMNS))\n        \c";
+	@echo -e "    - Test version ($(SMALL_ROWS_GLOBAL)x$(SMALL_COLUMNS))\n        \c";
 	$(CC) -o $(BIN_DIRECTORY)/openmp_small $(SRC_DIRECTORY)/openmp.c $(SRC_DIRECTORY)/util.c $(CFLAGS) $(SMALL_DEFINES) -DVERSION_RUN=\"openmp_small\" -fopenmp
 
 openmp_big: $(SRC_DIRECTORY)/openmp.c $(SRC_DIRECTORY)/util.c
-	@echo "    - Challenge version ($(BIG_ROWS_GLOBAL)x$(BIG_COLUMNS))\n        \c";
+	@echo -e "    - Challenge version ($(BIG_ROWS_GLOBAL)x$(BIG_COLUMNS))\n        \c";
 	$(CC) -o $(BIN_DIRECTORY)/openmp_big $(SRC_DIRECTORY)/openmp.c $(SRC_DIRECTORY)/util.c $(CFLAGS) $(BIG_DEFINES) -DVERSION_RUN=\"openmp_big\" -fopenmp
 
 #############
@@ -66,16 +66,16 @@ openmp_big: $(SRC_DIRECTORY)/openmp.c $(SRC_DIRECTORY)/util.c
 mpi_versions: print_mpi_compilation mpi_small mpi_big
 
 print_mpi_compilation:
-	@echo "\n//////////////////////////"; \
+	@echo -e "\n//////////////////////////"; \
 	 echo "// COMPILING MPI CODES //"; \
 	 echo "////////////////////////";
 
 mpi_small: $(SRC_DIRECTORY)/mpi.c $(SRC_DIRECTORY)/util.c
-	@echo "    - Test version ($(SMALL_ROWS)x$(SMALL_COLUMNS))\n        \c";
+	@echo -e "    - Test version ($(SMALL_ROWS)x$(SMALL_COLUMNS))\n        \c";
 	$(MPICC) -o $(BIN_DIRECTORY)/mpi_small $(SRC_DIRECTORY)/mpi.c $(SRC_DIRECTORY)/util.c $(CFLAGS) $(SMALL_DEFINES_MPI) -DVERSION_RUN=\"mpi_small\" -DVERSION_RUN_IS_MPI
 
 mpi_big: $(SRC_DIRECTORY)/mpi.c $(SRC_DIRECTORY)/util.c
-	@echo "    - Challenge version ($(BIG_ROWS)x$(BIG_COLUMNS))\n        \c";
+	@echo -e "    - Challenge version ($(BIG_ROWS)x$(BIG_COLUMNS))\n        \c";
 	$(MPICC) -o $(BIN_DIRECTORY)/mpi_big $(SRC_DIRECTORY)/mpi.c $(SRC_DIRECTORY)/util.c $(CFLAGS) $(BIG_DEFINES_MPI) -DVERSION_RUN=\"mpi_big\" -DVERSION_RUN_IS_MPI
 
 #############
@@ -92,19 +92,19 @@ help:
 	echo "------------------------------------------------------------------------------------";
 
 clean: help
-	@echo "\n////////////////////////";
+	@echo -e "\n////////////////////////";
 	@echo "// CLEANING BINARIES //";
 	@echo "//////////////////////";
 	rm -rf $(BIN_DIRECTORY);
 
 documentation: help
-	@echo "\n///////////////////////////////";
+	@echo -e "\n///////////////////////////////";
 	@echo "// GENERATING DOCUMENTATION //";
 	@echo "/////////////////////////////";
-	@echo "    - Generating doxygen... \c"; \
+	@echo -e "    - Generating doxygen... \c"; \
 	 doxygen > /dev/null 2>&1; \
 	 echo "done"; \
-	 echo "    - Compiling latex... \c"; \
+	 echo -e "    - Compiling latex... \c"; \
 	 cd $(DOC_DIRECTORY)/latex; \
 	 make > /dev/null 2>&1; \
 	 cd ../..; \
