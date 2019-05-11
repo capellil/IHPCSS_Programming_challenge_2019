@@ -128,7 +128,7 @@ void print_summary(int iteration, double dt, double timer_simulation)
 {
 	printf("\nVersion run: %s.\n", VERSION_RUN);
 	printf("The maximum temperature change was reached at iteration %d was %.18f\n", iteration, dt);
-	printf("Total time was %.1f seconds.\n", timer_simulation);
+	printf("Total time was %.1f seconds.\n", timer_simulation / 1000000.0f);
 }
 
 void start_timer(double* timer)
@@ -138,7 +138,7 @@ void start_timer(double* timer)
 	#else
 		struct timeval temp_timer;
 		gettimeofday(&temp_timer,NULL);
-		*timer = (temp_timer.tv_sec + temp_timer.tv_usec/1000000);
+		*timer = (temp_timer.tv_sec * 1000000 + temp_timer.tv_usec);
 	#endif
 }
 
@@ -149,6 +149,6 @@ void stop_timer(double* timer)
 	#else
 		struct timeval temp_timer;
 		gettimeofday(&temp_timer,NULL);
-		*timer = (temp_timer.tv_sec + temp_timer.tv_usec/1000000) - *timer;
+		*timer = (temp_timer.tv_sec * 1000000 + temp_timer.tv_usec) - *timer;
 	#endif
 }
