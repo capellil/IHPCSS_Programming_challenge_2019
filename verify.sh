@@ -73,8 +73,8 @@ else
 fi
 
 # Check the number of iterations
-number_iterations_reference=`cat "${reference_file}" | grep "Max error at iteration" | cut -d ' ' -f 5`
-number_iterations_challenger=`cat "${challenger_file}" | grep "Max error at iteration" | cut -d ' ' -f 5`
+number_iterations_reference=`cat "${reference_file}" | grep "iteration" | cut -d ' ' -f 9`
+number_iterations_challenger=`cat "${challenger_file}" | grep "iteration" | cut -d ' ' -f 9`
 if [ "${number_iterations_reference}" -eq "${number_iterations_challenger}" ]; then
 	echo_success "The temperature delta triggered the threshold at iteration ${number_iterations_reference} for both."
 else
@@ -82,8 +82,8 @@ else
 fi
 
 # Check the max error
-max_error_reference=`cat "${reference_file}" | grep "Max error at iteration" | cut -d ' ' -f 7`
-max_error_challenger=`cat "${challenger_file}" | grep "Max error at iteration" | cut -d ' ' -f 7`
+max_error_reference=`cat "${reference_file}" | grep "iteration" | cut -d ' ' -f 11`
+max_error_challenger=`cat "${challenger_file}" | grep "iteration" | cut -d ' ' -f 11`
 if [ "${max_error_reference}" = "${max_error_challenger}" ]; then
 	echo_success "The final maximum change in temperature is ${max_error_reference} for both."
 else
