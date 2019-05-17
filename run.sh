@@ -45,11 +45,12 @@ function is_in_array
 ######################
 clear;
 echo "Quick help:";
-echo -e "\t- This script is meant to be run as follows: './run.sh IMPLEMENTATION SIZE'";
-echo -e "\t- IMPLEMENTATION = 'serial' | 'openmp' | 'mpi' | 'hybrid' | 'openacc'";
+echo -e "\t- This script is meant to be run as follows: './run.sh IMPLEMENTATION SIZE [OUTPUT_FILE]'";
+echo -e "\t- IMPLEMENTATION = 'serial' | 'openmp' | 'mpi' | 'openacc'";
 echo -e "\t- SIZE = 'small' | 'big'";
+echo -e "\t- OUTPUT_FILE = the path to the file in which store the output. If no output file is given, the output is printed in the console."
 echo -e "\t- Example: to run the serial version on the small grid, run './run.sh serial small'.\n";
-if [ "$#" -eq "2" ]; then
+if [ "$#" -eq "2" ] || [ "$#" -eq "3" ]; then
 	echo_success "Correct number of arguments received; implementation = \"$1\" and size = \"$2\"."
 else
 	echo_failure "Wrong number of arguments received: please refer to the quick help above."
@@ -58,7 +59,7 @@ fi
 ###################################################
 # Check that the implementation passed is correct #
 ###################################################
-implementations=("serial" "openmp" "mpi" "hybrid" "openacc");
+implementations=("serial" "openmp" "mpi" "openacc");
 all_implementations=`echo ${implementations[@]}`;
 is_in_array implementations $1
 implementation_retrieved=$?;
@@ -107,7 +108,10 @@ fi
 if [ -z "${runner}" ]; then
 	command="${executable}";
 else
-	command="${runner} ${executable}"
+	command="${runner} ${executable}";
+fi
+if [ "$#" -eq "3" ]; then
+	command="${command} > $3";
 fi
 
 echo_success "Command issued to run your application: \"${command}\"";
