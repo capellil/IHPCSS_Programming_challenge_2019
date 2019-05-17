@@ -134,7 +134,7 @@ void print_summary(int iteration, double dt, double timer_simulation)
 void start_timer(double* timer)
 {
 	#ifdef VERSION_RUN_IS_MPI
-		*timer = MPI_Wtime();
+		*timer = MPI_Wtime() * 1000000;
 	#else
 		struct timeval temp_timer;
 		gettimeofday(&temp_timer,NULL);
@@ -145,7 +145,7 @@ void start_timer(double* timer)
 void stop_timer(double* timer)
 {
 	#ifdef VERSION_RUN_IS_MPI
-		*timer = MPI_Wtime() - *timer;
+		*timer = MPI_Wtime() * 1000000 - *timer;
 	#else
 		struct timeval temp_timer;
 		gettimeofday(&temp_timer,NULL);
