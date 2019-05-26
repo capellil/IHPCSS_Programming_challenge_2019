@@ -24,8 +24,12 @@ The illustration below shows the initial temperature values. The boundaries are 
 
 * Download: ```git clone https://github.com/capellil/IHPCSS_Coding_challenge.git```
 * Installation: ```make```
-* Run the experiments: ```./run.sh```
-* Submit your version to the challenge: ```./submit_my_version.sh```
+* Run locally: ```./run.sh IMPLEMENTATION SIZE [OUTPUT_FILE]```
+  * IMPLEMENTATION: the implementation version to use, it must be either "serial", "openmp", "mpi", "hybrid" or "openacc".
+  * SIZE: the size of the grid to use, it must be either "small" or "big".
+  * OUTPUT_FILE: optional parameter indicating in which file write the output generated. If no file is passed, the output is generated to the standard stream (your console).
+* Run on the compute nodes: ```./submit.sh IMPLEMENTATION SIZE OUTPUT_FILE```
+* Verify the output your program generated: ```./verify.sh FILE_TO_VERIFY```. You just need to pass your file; there is no need to pass the reference file because the script will fetched it automatically.
 
 ## What kind of optimisations are not allowed? ##
 
