@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
         printf("The small version is meant to be run with 4 MPI processes, not %d.\n", comm_size);
         MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
     }
-    else if(strcmp(VERSION_RUN, "mpi_big") == 0 && comm_size != 120)
+    else if(strcmp(VERSION_RUN, "mpi_big") == 0 && comm_size != 112)
     {
         printf("The big version is meant to be run with 120 MPI processes, not %d.\n", comm_size);
         MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
