@@ -29,7 +29,7 @@ The illustration below shows the initial temperature values. The boundaries are 
   * SIZE: the size of the grid to use, it must be either "small" or "big".
   * OUTPUT_FILE: optional parameter indicating in which file write the output generated. If no file is passed, the output is generated to the standard stream (your console).
 * Run on the compute nodes: ```./submit.sh IMPLEMENTATION SIZE OUTPUT_FILE```
-* Verify the output your program generated: ```./verify.sh FILE_TO_VERIFY```. You just need to pass your file; there is no need to pass the reference file because the script will fetched it automatically.
+* Verify the output your program generated: ```./verify.sh FILE_TO_VERIFY```. You just need to pass your file; there is no need to pass the reference file because the script will fetch it automatically.
 
 ## What kind of optimisations are not allowed? ##
 
