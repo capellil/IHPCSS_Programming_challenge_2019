@@ -71,11 +71,11 @@ print_mpi_compilation:
 	 echo "////////////////////////";
 
 mpi_small: $(SRC_DIRECTORY)/mpi.c $(SRC_DIRECTORY)/util.c
-	@echo -e "    - Test version ($(SMALL_ROWS)x$(SMALL_COLUMNS))\n        \c";
+	@echo -e "    - Test version ($(SMALL_ROWS_GLOBAL)x$(SMALL_COLUMNS))\n        \c";
 	$(MPICC) -o $(BIN_DIRECTORY)/mpi_small $(SRC_DIRECTORY)/mpi.c $(SRC_DIRECTORY)/util.c $(CFLAGS) $(SMALL_DEFINES_MPI) -DVERSION_RUN=\"mpi_small\" -DVERSION_RUN_IS_MPI
 
 mpi_big: $(SRC_DIRECTORY)/mpi.c $(SRC_DIRECTORY)/util.c
-	@echo -e "    - Challenge version ($(BIG_ROWS)x$(BIG_COLUMNS))\n        \c";
+	@echo -e "    - Challenge version ($(BIG_ROWS_GLOBAL)x$(BIG_COLUMNS))\n        \c";
 	$(MPICC) -o $(BIN_DIRECTORY)/mpi_big $(SRC_DIRECTORY)/mpi.c $(SRC_DIRECTORY)/util.c $(CFLAGS) $(BIG_DEFINES_MPI) -DVERSION_RUN=\"mpi_big\" -DVERSION_RUN_IS_MPI
 
 ################
@@ -89,11 +89,11 @@ print_hybrid_compilation:
 	 echo "///////////////////////////";
 
 hybrid_small: $(SRC_DIRECTORY)/hybrid.c $(SRC_DIRECTORY)/util.c
-	@echo -e "    - Test version ($(SMALL_ROWS)x$(SMALL_COLUMNS))\n        \c";
+	@echo -e "    - Test version ($(SMALL_ROWS_GLOBAL)x$(SMALL_COLUMNS))\n        \c";
 	$(MPICC) -o $(BIN_DIRECTORY)/hybrid_small $(SRC_DIRECTORY)/hybrid.c $(SRC_DIRECTORY)/util.c $(CFLAGS) $(SMALL_DEFINES_MPI) -qopenmp -DVERSION_RUN=\"mpi_small\" -DVERSION_RUN_IS_MPI
 
 hybrid_big: $(SRC_DIRECTORY)/hybrid.c $(SRC_DIRECTORY)/util.c
-	@echo -e "    - Challenge version ($(BIG_ROWS)x$(BIG_COLUMNS))\n        \c";
+	@echo -e "    - Challenge version ($(BIG_ROWS_GLOBAL)x$(BIG_COLUMNS))\n        \c";
 	$(MPICC) -o $(BIN_DIRECTORY)/hybrid_big $(SRC_DIRECTORY)/hybrid.c $(SRC_DIRECTORY)/util.c $(CFLAGS) $(BIG_DEFINES_MPI) -qopenmp -DVERSION_RUN=\"mpi_big\" -DVERSION_RUN_IS_MPI
 
 #############
