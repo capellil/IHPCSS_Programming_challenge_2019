@@ -5,9 +5,9 @@ You are taking part to the [International High-Performance Computing Summer Scho
 ## What is the challenge? ##
 
 The calculations performed in this Laplace application consist in propagating the temperature from a cell to its neighbours. Initially, the temperatures are defaulted as 0 except:
-* The bottom-right corner which starts at 100 degrees.</li>
-* The right boundary, where the temperature linearly decreases from 100 to 0 as we move upward.</li>
-* The bottom boundary, where the temperature linearly decreases from 100 to 0 as we move leftward.</li>
+* The bottom-right corner which starts at 100 degrees.
+* The right boundary, where the temperature linearly decreases from 100 to 0 as we move upward.
+* The bottom boundary, where the temperature linearly decreases from 100 to 0 as we move leftward.
 
 The illustration below shows the initial temperature values. The boundaries are represented outside the square with the thick border, the cells to process are inside that same square.
 <p>
