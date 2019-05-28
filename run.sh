@@ -46,7 +46,7 @@ function is_in_array
 clear;
 echo "Quick help:";
 echo -e "\t- This script is meant to be run as follows: './run.sh IMPLEMENTATION SIZE [OUTPUT_FILE]'";
-echo -e "\t- IMPLEMENTATION = 'serial' | 'openmp' | 'mpi' | 'openacc'";
+echo -e "\t- IMPLEMENTATION = 'serial' | 'openmp' | 'mpi' | 'hybrid' | 'openacc'";
 echo -e "\t- SIZE = 'small' | 'big'";
 echo -e "\t- OUTPUT_FILE = the path to the file in which store the output. If no output file is given, the output is printed in the console."
 echo -e "\t- Example: to run the serial version on the small grid, run './run.sh serial small'.\n";
@@ -59,7 +59,7 @@ fi
 ###################################################
 # Check that the implementation passed is correct #
 ###################################################
-implementations=("serial" "openmp" "mpi" "openacc");
+implementations=("serial" "openmp" "mpi" "hybrid" "openacc");
 all_implementations=`echo ${implementations[@]}`;
 is_in_array implementations $1
 implementation_retrieved=$?;
@@ -90,13 +90,19 @@ if [ "$1" == "mpi" ]; then
 	if [ "$2" == "small" ]; then
 		runner="mpirun -n 4";
 	else
-		runner="mpirun -n 120";
+		runner="mpirun -n 112";
 	fi
 elif [ "$1" == "openmp" ]; then
 	if [ "$2" == "small" ]; then
 		runner="OMP_NUM_THREADS=4";
 	else
-		runner="OMP_NUM_THREADS=120";
+		runner="OMP_NUM_THREADS=28";
+	fi
+elif [ "$1" == "hybrid" ]; then
+	if [ "$2" == "small" ]; then
+		runner="mpirun -n 2 -genv OMP_NUM_THREADS=2 -genv I_MPI_PIN_PROCESSOR_LIST=allcores,map=scatter -genv KMP_PLACE_THREADS=1T -genv KMP_AFFINITY=verbose,compact";
+	else
+		runner="mpirun -n 8 -ppn 2 -genv OMP_NUM_THREADS=14 -genv I_MPI_PIN_PROCESSOR_LIST=allcores,map=scatter -genv KMP_PLACE_THREADS=1T -genv KMP_AFFINITY=verbose,compact";
 	fi
 fi
 executable="./bin/$1_$2";

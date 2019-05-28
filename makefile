@@ -14,15 +14,15 @@ BIG_COLUMNS=10752
 BIG_DEFINES=-DROWS=$(BIG_ROWS_GLOBAL) -DROWS_GLOBAL=$(BIG_ROWS_GLOBAL) -DCOLUMNS=$(BIG_COLUMNS)
 BIG_DEFINES_MPI=-DROWS=$(BIG_ROWS) -DROWS_GLOBAL=$(BIG_ROWS_GLOBAL) -DCOLUMNS=$(BIG_COLUMNS)
 
-CC=gcc
-MPICC=mpicc
+CC=icc
+MPICC=mpiicc
 CFLAGS=-std=c99 -O3 -lm -Wall -Wextra
 
 default: help quick_compile
 
 all: help documentation quick_compile 
 
-quick_compile: create_directories serial_versions openmp_versions mpi_versions
+quick_compile: create_directories serial_versions openmp_versions mpi_versions hybrid_versions
 
 ################
 # SERIAL CODES #
@@ -54,11 +54,11 @@ print_openmp_compilation:
 
 openmp_small: $(SRC_DIRECTORY)/openmp.c $(SRC_DIRECTORY)/util.c
 	@echo -e "    - Test version ($(SMALL_ROWS_GLOBAL)x$(SMALL_COLUMNS))\n        \c";
-	$(CC) -o $(BIN_DIRECTORY)/openmp_small $(SRC_DIRECTORY)/openmp.c $(SRC_DIRECTORY)/util.c $(CFLAGS) $(SMALL_DEFINES) -DVERSION_RUN=\"openmp_small\" -fopenmp
+	$(CC) -o $(BIN_DIRECTORY)/openmp_small $(SRC_DIRECTORY)/openmp.c $(SRC_DIRECTORY)/util.c $(CFLAGS) $(SMALL_DEFINES) -DVERSION_RUN=\"openmp_small\" -qopenmp
 
 openmp_big: $(SRC_DIRECTORY)/openmp.c $(SRC_DIRECTORY)/util.c
 	@echo -e "    - Challenge version ($(BIG_ROWS_GLOBAL)x$(BIG_COLUMNS))\n        \c";
-	$(CC) -o $(BIN_DIRECTORY)/openmp_big $(SRC_DIRECTORY)/openmp.c $(SRC_DIRECTORY)/util.c $(CFLAGS) $(BIG_DEFINES) -DVERSION_RUN=\"openmp_big\" -fopenmp
+	$(CC) -o $(BIN_DIRECTORY)/openmp_big $(SRC_DIRECTORY)/openmp.c $(SRC_DIRECTORY)/util.c $(CFLAGS) $(BIG_DEFINES) -DVERSION_RUN=\"openmp_big\" -qopenmp
 
 #############
 # MPI CODES #
@@ -77,6 +77,24 @@ mpi_small: $(SRC_DIRECTORY)/mpi.c $(SRC_DIRECTORY)/util.c
 mpi_big: $(SRC_DIRECTORY)/mpi.c $(SRC_DIRECTORY)/util.c
 	@echo -e "    - Challenge version ($(BIG_ROWS)x$(BIG_COLUMNS))\n        \c";
 	$(MPICC) -o $(BIN_DIRECTORY)/mpi_big $(SRC_DIRECTORY)/mpi.c $(SRC_DIRECTORY)/util.c $(CFLAGS) $(BIG_DEFINES_MPI) -DVERSION_RUN=\"mpi_big\" -DVERSION_RUN_IS_MPI
+
+################
+# HYBRID CODES #
+################
+hybrid_versions: print_hybrid_compilation hybrid_small hybrid_big
+
+print_hybrid_compilation:
+	@echo -e "\n/////////////////////////////"; \
+	 echo "// COMPILING HYBRID CODES //"; \
+	 echo "///////////////////////////";
+
+hybrid_small: $(SRC_DIRECTORY)/hybrid.c $(SRC_DIRECTORY)/util.c
+	@echo -e "    - Test version ($(SMALL_ROWS)x$(SMALL_COLUMNS))\n        \c";
+	$(MPICC) -o $(BIN_DIRECTORY)/hybrid_small $(SRC_DIRECTORY)/hybrid.c $(SRC_DIRECTORY)/util.c $(CFLAGS) $(SMALL_DEFINES_MPI) -qopenmp -DVERSION_RUN=\"mpi_small\" -DVERSION_RUN_IS_MPI
+
+hybrid_big: $(SRC_DIRECTORY)/hybrid.c $(SRC_DIRECTORY)/util.c
+	@echo -e "    - Challenge version ($(BIG_ROWS)x$(BIG_COLUMNS))\n        \c";
+	$(MPICC) -o $(BIN_DIRECTORY)/hybrid_big $(SRC_DIRECTORY)/hybrid.c $(SRC_DIRECTORY)/util.c $(CFLAGS) $(BIG_DEFINES_MPI) -qopenmp -DVERSION_RUN=\"mpi_big\" -DVERSION_RUN_IS_MPI
 
 #############
 # UTILITIES #
