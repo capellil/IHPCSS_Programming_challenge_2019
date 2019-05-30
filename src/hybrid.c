@@ -41,12 +41,12 @@ int main(int argc, char *argv[])
     MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
     MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
 
-    if(strcmp(VERSION_RUN, "mpi_small") == 0 && comm_size != 4)
+    if(strcmp(VERSION_RUN, "hybrid_small") == 0 && comm_size != 2)
     {
         printf("The small version is meant to be run with 4 MPI processes, not %d.\n", comm_size);
         MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
     }
-    else if(strcmp(VERSION_RUN, "mpi_big") == 0 && comm_size != 120)
+    else if(strcmp(VERSION_RUN, "hybrid_big") == 0 && comm_size != 8)
     {
         printf("The big version is meant to be run with 120 MPI processes, not %d.\n", comm_size);
         MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
