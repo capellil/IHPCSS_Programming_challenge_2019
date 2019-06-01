@@ -95,8 +95,8 @@ timing_reference=`cat "${reference_file}" | grep "Total time was" | cut -d ' ' -
 timing_challenger=`cat "${challenger_file}" | grep "Total time was" | cut -d ' ' -f 4`
 if [ $(bc <<< "${timing_reference} < ${timing_challenger}") -eq "1" ]; then
 	speedup_slower=$(bc <<< "scale=2; ${timing_challenger}/${timing_reference}")
-	echo_timing "Your version is ${speedup_slower} times faster: ${timing_reference}s vs ${timing_challenger}s."
+	echo_timing "Your version is ${speedup_slower} times slower: ${timing_challenger}s (you) vs ${timing_reference}s (reference)."
 else
 	speedup_faster=$(bc <<< "scale=2; ${timing_reference}/${timing_challenger}")
-	echo_timing "Your version is ${speedup_faster} times faster: ${timing_reference}s vs ${timing_challenger}s."
+	echo_timing "Your version is ${speedup_faster} times faster: ${timing_challenger}s (you) vs ${timing_reference}s (reference)."
 fi
