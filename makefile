@@ -10,23 +10,25 @@ SMALL_DEFINES=-DROWS=$(SMALL_ROWS_GLOBAL) -DROWS_GLOBAL=$(SMALL_ROWS_GLOBAL) -DC
 SMALL_DEFINES_MPI=-DROWS=$(SMALL_ROWS) -DROWS_GLOBAL=$(SMALL_ROWS_GLOBAL) -DCOLUMNS=$(SMALL_COLUMNS)
 SMALL_DEFINES_HYBRID=-DROWS=$(SMALL_ROWS_HYBRID) -DROWS_GLOBAL=$(SMALL_ROWS_GLOBAL) -DCOLUMNS=$(SMALL_COLUMNS)
 
-BIG_ROWS=96
-BIG_ROWS_HYBRID=1344
-BIG_ROWS_GLOBAL=10752
-BIG_COLUMNS=10752
+BIG_ROWS=130
+BIG_ROWS_HYBRID=1820
+BIG_ROWS_GLOBAL=14560
+BIG_COLUMNS=14560
 BIG_DEFINES=-DROWS=$(BIG_ROWS_GLOBAL) -DROWS_GLOBAL=$(BIG_ROWS_GLOBAL) -DCOLUMNS=$(BIG_COLUMNS)
 BIG_DEFINES_MPI=-DROWS=$(BIG_ROWS) -DROWS_GLOBAL=$(BIG_ROWS_GLOBAL) -DCOLUMNS=$(BIG_COLUMNS)
 BIG_DEFINES_HYBRID=-DROWS=$(BIG_ROWS_HYBRID) -DROWS_GLOBAL=$(BIG_ROWS_GLOBAL) -DCOLUMNS=$(BIG_COLUMNS)
 
 CC=icc
 MPICC=mpiicc
+OPENACCCC=pgcc
 CFLAGS=-std=c99 -O3 -lm -Wall -Wextra
+PGICFLAGS=-c99 -O3 -acc 
 
 default: help quick_compile
 
 all: help documentation quick_compile 
 
-quick_compile: create_directories serial_versions openmp_versions mpi_versions hybrid_versions
+quick_compile: create_directories serial_versions openmp_versions mpi_versions hybrid_versions openacc_versions
 
 ################
 # SERIAL CODES #
@@ -100,6 +102,27 @@ hybrid_big: $(SRC_DIRECTORY)/hybrid.c $(SRC_DIRECTORY)/util.c
 	@echo -e "    - Challenge version ($(BIG_ROWS_GLOBAL)x$(BIG_COLUMNS))\n        \c";
 	$(MPICC) -o $(BIN_DIRECTORY)/hybrid_big $(SRC_DIRECTORY)/hybrid.c $(SRC_DIRECTORY)/util.c $(CFLAGS) $(BIG_DEFINES_HYBRID) -qopenmp -DVERSION_RUN=\"hybrid_big\" -DVERSION_RUN_IS_MPI
 
+#################
+# OPENACC CODES #
+#################
+openacc_versions: print_openacc_compilation openacc_small openacc_big clean_objects
+
+print_openacc_compilation:
+	@echo -e "\n//////////////////////////////"; \
+	 echo "// COMPILING OPENACC CODES //"; \
+	 echo "////////////////////////////";
+
+openacc_small: $(SRC_DIRECTORY)/openacc.c $(SRC_DIRECTORY)/util.c
+	@echo -e "    - Test version ($(SMALL_ROWS_GLOBAL)x$(SMALL_COLUMNS))\n        \c";
+	$(OPENACCCC) -o $(BIN_DIRECTORY)/openacc_small $(SRC_DIRECTORY)/openacc.c $(SRC_DIRECTORY)/util.c $(PGICFLAGS) $(SMALL_DEFINES) -DVERSION_RUN=\"openacc_small\"
+
+openacc_big: $(SRC_DIRECTORY)/openacc.c $(SRC_DIRECTORY)/util.c
+	@echo -e "    - Challenge version ($(BIG_ROWS_GLOBAL)x$(BIG_COLUMNS))\n        \c";
+	$(OPENACCCC) -o $(BIN_DIRECTORY)/openacc_big $(SRC_DIRECTORY)/openacc.c $(SRC_DIRECTORY)/util.c $(PGICFLAGS) $(BIG_DEFINES) -DVERSION_RUN=\"openacc_big\"
+
+clean_objects:
+	@rm -f *.o;
+
 #############
 # UTILITIES #
 #############
@@ -108,10 +131,13 @@ create_directories:
 
 help:
 	@clear; \
-	echo "Quick help: "; \
-	echo "    - To generate the documentation, please issue 'make documentation'."; \
-	echo "    - To delete all binaries generated, please issue 'make clean'."; \
-	echo "------------------------------------------------------------------------------------";
+	echo "+-----------+"; \
+	echo "| Quick help \\"; \
+	echo "+-------------+------------------+--------------------+"; \
+	echo "| Generate the documentation     | make documentation |"; \
+	echo "| Delete all binaries            | make clean         |"; \
+	echo "| 'make: XXX: Command not found' | module load XXX    |"; \
+	echo "+-----------------------------------------------------+";
 
 clean: help
 	@echo -e "\n////////////////////////";
