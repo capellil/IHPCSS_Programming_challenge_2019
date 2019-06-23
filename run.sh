@@ -100,11 +100,9 @@ elif [ "$1" == "openmp" ]; then
 	fi
 elif [ "$1" == "hybrid" ]; then
 	if [ "$2" == "small" ]; then
-		#runner="mpirun -n 2 -genv OMP_NUM_THREADS=2 -genv I_MPI_PIN_PROCESSOR_LIST=allcores,map=scatter -genv KMP_PLACE_THREADS=1T -genv KMP_AFFINITY=verbose,compact";
-		runner="OMP_NUM_THREADS=2 mpirun -n 2";
+		runner="mpirun -n 2 -genv OMP_NUM_THREADS=2 -genv I_MPI_PIN_DOMAIN=omp";
 	else
-		#runner="mpirun -n 8 -ppn 2 -genv OMP_NUM_THREADS=14 -genv I_MPI_PIN_PROCESSOR_LIST=allcores,map=scatter -genv KMP_PLACE_THREADS=1T -genv KMP_AFFINITY=verbose,compact";
-		runner="OMP_NUM_THREADS=14 mpirun -n 8 -ppn 2";
+		runner="mpirun -n 8 -genv OMP_NUM_THREADS=14 -genv I_MPI_PIN_DOMAIN=omp";
 	fi
 elif [ "$1" == "openacc" ]; then
 	if [ "$2" == "small" ]; then
