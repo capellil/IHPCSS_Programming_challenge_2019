@@ -23,16 +23,14 @@ The illustration below shows the initial temperature values. The boundaries are 
 
 ## How do I get set up? ##
 ### Download the source codes ###
-All you have to do is clone this repository: ```git clone https://github.com/capellil/IHPCSS_Coding_challenge.git```. You are strongly encouraged to work on the source files provided instead of making copies.
+All you have to do is clone this repository: ```git clone https://github.com/capellil/IHPCSS_Coding_challenge.git```.
 
-Example: let's say you want to work on the MPI version, no need to make a copy of the file ```mpi.c```, just work on ```mpi.c``` directly. When you will want to see what you modified, just issue a simple  ```git diff mpi.c```.
-
-The reason you are strongly encouraged to work on the source files provided, compared to making copies and work on these copies, is that you will see below that multiple scripts have been written to make your life much easier. However, these scripts have been written for the files provided, not the copies you may make.
+Note that you are strongly encouraged to work on the source files provided instead of making copies. To keep it short, you will discover in the sections below that multiple scripts have been written to make your life easier (makefile, running locally, submitting to compute nodes, verification). However, these scripts are designed to work with the files provided, not the arbitrary copies you could make.
 
 ### Generate the binaries ###
 There is a makefile as you can see; it will compile all versions (serial, OpenMP, MPI, OpenACC etc...) and generate the corresponding binaries in a folder ```bin```. OpenACC requires the PGI compiler, so make sure you have the PGI module loaded (```module load pgi```) before you issue ```make```.
 
-How does it work? Each version is compiled twice, once for the small grid and once for the big grid (see section below for definitions). 
+How does it work? Each version is compiled twice, once for the small grid and once for the big grid (see section below for definitions).
 
 ### Run locally ###
 To make your life easier, a simple script has been written so you can launch your applications effortlessly: ```./run.sh IMPLEMENTATION SIZE [OUTPUT_FILE]```.
