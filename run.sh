@@ -1,5 +1,34 @@
 #!/bin/bash
 
+################################################################################
+# READ ME                                                                      #
+#------------------------------------------------------------------------------#
+# MOTIVATION                                                                   #
+# Running an application in a wrong way is easy:                               #
+# - not setting OMP_NUM_THREADS, or forgetting to update it for a given run    #
+# - not launching an MPI application with mpirun                               #
+# - using the wrong number of processes                                        #
+# - using a bad thread pinning scheme                                          #
+# This is why this script has been written; it takes care of launching the     #
+# application in the right way so that you can focus on the actual development #
+# and optimisation techniques.                                                 #
+# So, how does it know how to launch the application? If you have been using   #
+# the makefile provided, you have two binaries per technology, one for the big #
+# grid, one for the small grid. By passing the technology and grid size to this#
+# script, it knows which binary fetch and how to launch it.                    #
+#                                                                              #
+# PARAMETERS                                                                   #
+# 1) Technology: one of 'serial' | 'openmp' | 'mpi' | 'openacc' | 'hybrid'     #
+# 2) Size: one of 'small' | 'big'                                              #
+# 3) Output file: optional parameter indicating where to store the output. If  #
+#    no output file is given, the output is showed on the console.             #
+#                                                                              #
+# EXAMPLES                                                                     #
+# ./run.sh openmp small                                                        #
+# ./run.sh mpi big my_result_file.txt                                          #
+# ./run.sh openacc small openacc_small_output.txt                              #
+################################################################################
+
 function echo_good
 {
 	echo -e "\033[32m$1\033[0m\c"
