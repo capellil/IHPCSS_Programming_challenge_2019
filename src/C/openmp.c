@@ -8,6 +8,7 @@
 
 #include "util.h"
 #include <math.h> // fabs
+#include <stdio.h> // printf
 #include <stdlib.h> // EXIT_SUCCESS
 #include <omp.h>
 
@@ -40,46 +41,48 @@ int main(int argc, char *argv[])
     {
         #pragma omp master
         {
-            // Do until error is under threshold or until max iterations is reached
-            while(dt > MAX_TEMP_ERROR && iteration <= MAX_NUMBER_OF_ITERATIONS)
-            {
-                iteration++;
-
-                // Reset largest temperature change
-                dt = 0.0; 
-
-                // Main calculation: average my four neighbors
-                #pragma omp parallel for
-                for(unsigned int i = 1; i <= ROWS; i++)
-                {
-                    for(unsigned int j = 1; j <= COLUMNS; j++)
-                    {
-                        temperature[i][j] = 0.25 * (temperature_last[i+1][j  ] +
-                                                    temperature_last[i-1][j  ] +
-                                                    temperature_last[i  ][j+1] +
-                                                    temperature_last[i  ][j-1]);
-                    }
-                }
-
-                // Copy grid to old grid for next iteration and find latest dt
-                #pragma omp parallel for reduction(max:dt)
-                for(unsigned int i = 1; i <= ROWS; i++)
-                {
-                    for(unsigned int j = 1; j <= COLUMNS; j++)
-                    {
-                        dt = fmax(fabs(temperature[i][j]-temperature_last[i][j]), dt);
-                        temperature_last[i][j] = temperature[i][j];
-                    }
-                }
-
-                // Periodically print test values
-                if((iteration % PRINT_FREQUENCY) == 0)
-                {
-                    track_progress(iteration);
-                }
-            }
+			printf("Application run using %d OpenMP threads.\n", omp_get_num_threads());
         } // End of OpenMP master region
     } // End of OpenMP parallel region
+
+	// Do until error is under threshold or until max iterations is reached
+	while(dt > MAX_TEMP_ERROR && iteration <= MAX_NUMBER_OF_ITERATIONS)
+	{
+		iteration++;
+
+		// Reset largest temperature change
+		dt = 0.0; 
+
+		// Main calculation: average my four neighbors
+		#pragma omp parallel for
+		for(unsigned int i = 1; i <= ROWS; i++)
+		{
+			for(unsigned int j = 1; j <= COLUMNS; j++)
+			{
+				temperature[i][j] = 0.25 * (temperature_last[i+1][j  ] +
+											temperature_last[i-1][j  ] +
+											temperature_last[i  ][j+1] +
+											temperature_last[i  ][j-1]);
+			}
+		}
+
+		// Copy grid to old grid for next iteration and find latest dt
+		#pragma omp parallel for reduction(max:dt)
+		for(unsigned int i = 1; i <= ROWS; i++)
+		{
+			for(unsigned int j = 1; j <= COLUMNS; j++)
+			{
+				dt = fmax(fabs(temperature[i][j]-temperature_last[i][j]), dt);
+				temperature_last[i][j] = temperature[i][j];
+			}
+		}
+
+		// Periodically print test values
+		if((iteration % PRINT_FREQUENCY) == 0)
+		{
+			track_progress(iteration);
+		}
+	}
 
     /////////////////////////////////////////////
     // -- Code from here is no longer timed -- //
