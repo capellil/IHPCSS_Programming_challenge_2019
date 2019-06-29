@@ -126,7 +126,8 @@ void track_progress(int iteration)
 
 void print_summary(int iteration, double dt, double timer_simulation)
 {
-	printf("\nVersion run: %s.\n", VERSION_RUN);
+	printf("\nLanguage used: C.\n");
+	printf("Version run: %s.\n", VERSION_RUN);
 	printf("The maximum temperature change was reached at iteration %d was %.18f\n", iteration, dt);
 	printf("Total time was %.1f seconds.\n", timer_simulation / 1000000.0f);
 }

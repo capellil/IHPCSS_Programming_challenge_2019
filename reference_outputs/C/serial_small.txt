@@ -33,6 +33,7 @@ ITERATION   3000 |         97.07 |         97.76 |         98.38 |         98.93
 ITERATION   3100 |         97.11 |         97.79 |         98.40 |         98.94 |         99.41 |         99.82
 ITERATION   3200 |         97.15 |         97.82 |         98.42 |         98.95 |         99.42 |         99.82
 
-Version run: openacc_small.
+Language used: C.
+Version run: serial_small.
 The maximum temperature change was reached at iteration 3264 was 0.009998997242981034
-Total time was 0.5 seconds.
+Total time was 5.0 seconds.

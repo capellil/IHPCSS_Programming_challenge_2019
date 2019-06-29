@@ -7,4 +7,4 @@
 #SBATCH --gres=gpu:p100:1
 #SBATCH -A ac560tp
 set -x
-./run.sh openacc small ${1}
+./run.sh ${1} openacc small ${2}

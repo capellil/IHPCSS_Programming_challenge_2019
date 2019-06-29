@@ -1,3 +1,5 @@
+Running on 112 MPI processes
+
 ITERATION NUMBER | [14554,14554] | [14555,14555] | [14556,14556] | [14557,14557] | [14558,14558] | [14559,14559]
 -----------------+---------------+---------------+---------------+---------------+---------------+--------------
 ITERATION    100 |         63.71 |         73.05 |         81.75 |         89.26 |         95.06 |         98.74
@@ -36,6 +38,7 @@ ITERATION   3300 |         98.56 |         98.99 |         99.34 |         99.62
 ITERATION   3400 |         98.60 |         99.01 |         99.36 |         99.63 |         99.83 |         99.96
 ITERATION   3500 |         98.63 |         99.04 |         99.38 |         99.64 |         99.84 |         99.96
 
-Version run: openacc_big.
+Language used: C.
+Version run: mpi_big.
 The maximum temperature change was reached at iteration 3586 was 0.009996974331912156
-Total time was 95.8 seconds.
+Total time was 112.8 seconds.

@@ -46,20 +46,34 @@ function is_in_array
 ######################
 clear;
 echo "Quick help:";
-echo "  - This script is meant to be submit as follows: './submit.sh IMPLEMENTATION SIZE OUTPUT_FILE'";
+echo "  - This script is meant to be submit as follows: './submit.sh LANGUAGE IMPLEMENTATION SIZE OUTPUT_FILE'";
+echo "  - LANGUAGE = 'C' | 'FORTRAN'";
 echo "  - IMPLEMENTATION = 'serial' | 'openmp' | 'mpi' | 'hybrid' | 'openacc'";
 echo "  - SIZE = 'small' | 'big'";
 echo "  - OUTPUT_FILE = the path to the file in which store the output.";
-echo "  - Example: to submit the serial version on the small grid, submit './submit.sh serial small'.";
+echo "  - Example: to submit the C serial version on the small grid, submit './submit.sh C serial small'.";
 echo "";
 
 #################################
 # Check the number of arguments #
 #################################
-if [ "$#" -eq "3" ]; then
+if [ "$#" -eq "4" ]; then
 	echo_success "Correct number of arguments received."
 else
-	echo_failure "Incorrect number of arguments received; $# passed whereas 3 are expected."
+	echo_failure "Incorrect number of arguments received; $# passed whereas 4 are expected. Please refer to the quick help above."
+fi
+
+#############################################
+# Check that the language passed is correct #
+#############################################
+languages=("C" "FORTRAN");
+all_languages=`echo ${languages[@]}`;
+is_in_array languages $1
+language_retrieved=$?;
+if [ "${language_retrieved}" == "0" ]; then
+	echo_success "The language passed is correct.";
+else
+	echo_failure "The language '$1' is unknown. It must be one of: ${all_languages}.";
 fi
 
 ###################################################
@@ -67,12 +81,12 @@ fi
 ###################################################
 implementations=("serial" "openmp" "mpi" "hybrid" "openacc");
 all_implementations=`echo ${implementations[@]}`;
-is_in_array implementations $1
+is_in_array implementations $2
 implementation_retrieved=$?;
 if [ "${implementation_retrieved}" == "0" ]; then
 	echo_success "The implementation passed is correct.";
 else
-	echo_failure "The implementation '$1' is unknown. It must be one of: ${all_implementations}.";
+	echo_failure "The implementation '$2' is unknown. It must be one of: ${all_implementations}.";
 fi
 
 #########################################
@@ -80,23 +94,23 @@ fi
 #########################################
 sizes=("small" "big");
 all_sizes=`echo ${sizes[@]}`;
-is_in_array sizes $2
+is_in_array sizes $3
 size_retrieved=$?;
 if [ "${size_retrieved}" == "0" ]; then
 	echo_success "The size passed is correct.";
 else
-	echo_failure "The size '$2' is unknown. It must be one of: ${all_sizes}.";
+	echo_failure "The size '$3' is unknown. It must be one of: ${all_sizes}.";
 fi
 
 #########################################################
 # Check that the corresponding submission script exists #
 #########################################################
 slurm_scripts_path="./slurm_scripts";
-slurm_script_to_submit="${slurm_scripts_path}/$1_$2.slurm";
+slurm_script_to_submit="${slurm_scripts_path}/$2_$3.slurm";
 if [ -f "${slurm_script_to_submit}" ]; then
 	echo_success "The corresponding submission script \"${slurm_script_to_submit}\" has been found."
 else
 	echo_failure "The corresponding submission script \"${slurm_script_to_submit}\"has not been found."
 fi
 
-sbatch ${slurm_script_to_submit} $3
+sbatch ${slurm_script_to_submit} $4

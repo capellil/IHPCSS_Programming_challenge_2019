@@ -38,7 +38,10 @@ else
 	echo_failure "Wrong number of arguments received: please pass the file you want to verify. Don't worry about the reference file to compare against, this script will fetch it automatically in the reference file folder."
 fi
 
-# Check the challenger file exists
+
+####################################
+# Check the challenger file exists #
+####################################
 challenger_file=$1
 if [ -f "${challenger_file}" ]; then
 	echo_success "The file you passed exists."
@@ -46,7 +49,19 @@ else
 	echo_failure "The file you passed does not exist."
 fi
 
-# Get the version run
+#########################
+# Get the language used #
+#########################
+language_used=`cat ${challenger_file} | grep "Language used" | cut -d ':' -f 2 | cut -d ' ' -f 2 | cut -d '.' -f 1`
+if [ ! -z "${language_used}" ]; then
+	echo_success "The language used has been retrieved: ${language_used}.";
+else
+	echo_failure "The language used has not been retrieved. The program should have produced a line as follows: \"Language used: X.\".";
+fi
+
+#######################
+# Get the version run #
+#######################
 version_run=`cat ${challenger_file} | grep "Version run" | cut -d ':' -f 2 | cut -d ' ' -f 2 | cut -d '.' -f 1`
 if [ ! -z "${version_run}" ]; then
 	echo_success "The version run has been retrieved: ${version_run}.";
@@ -55,7 +70,7 @@ else
 fi
 
 # Check the reference file exists
-reference_file="reference_outputs/${version_run}.txt"
+reference_file="reference_outputs/${language_used}/${version_run}.txt"
 if [ -f "${reference_file}" ]; then
 	echo_success "The reference file \"${reference_file}\" has been retrieved."
 else

@@ -18,15 +18,16 @@
 # script, it knows which binary fetch and how to launch it.                    #
 #                                                                              #
 # PARAMETERS                                                                   #
-# 1) Technology: one of 'serial' | 'openmp' | 'mpi' | 'openacc' | 'hybrid'     #
-# 2) Size: one of 'small' | 'big'                                              #
-# 3) Output file: optional parameter indicating where to store the output. If  #
+# 1) Language: one of 'C' | 'FORTRAN'                                          #
+# 2) Technology: one of 'serial' | 'openmp' | 'mpi' | 'openacc' | 'hybrid'     #
+# 3) Size: one of 'small' | 'big'                                              #
+# 4) Output file: optional parameter indicating where to store the output. If  #
 #    no output file is given, the output is showed on the console.             #
 #                                                                              #
 # EXAMPLES                                                                     #
-# ./run.sh openmp small                                                        #
-# ./run.sh mpi big my_result_file.txt                                          #
-# ./run.sh openacc small openacc_small_output.txt                              #
+# ./run.sh C openmp small                                                      #
+# ./run.sh FORTRAN mpi big my_result_file.txt                                  #
+# ./run.sh C openacc small openacc_small_output.txt                            #
 ################################################################################
 
 function echo_good
@@ -74,15 +75,33 @@ function is_in_array
 ######################
 clear;
 echo "Quick help:";
-echo -e "\t- This script is meant to be run as follows: './run.sh IMPLEMENTATION SIZE [OUTPUT_FILE]'";
+echo -e "\t- This script is meant to be run as follows: './run.sh LANGUAGE IMPLEMENTATION SIZE [OUTPUT_FILE]'";
+echo -e "\t- LANGUAGE = 'C' | 'FORTRAN'";
 echo -e "\t- IMPLEMENTATION = 'serial' | 'openmp' | 'mpi' | 'hybrid' | 'openacc'";
 echo -e "\t- SIZE = 'small' | 'big'";
 echo -e "\t- OUTPUT_FILE = the path to the file in which store the output. If no output file is given, the output is printed in the console."
-echo -e "\t- Example: to run the serial version on the small grid, run './run.sh serial small'.\n";
-if [ "$#" -eq "2" ] || [ "$#" -eq "3" ]; then
-	echo_success "Correct number of arguments received; implementation = \"$1\" and size = \"$2\"."
+echo -e "\t- Example: to run the C serial version on the small grid, run './run.sh C serial small'.\n";
+
+#################################
+# Check the number of arguments #
+#################################
+if [ "$#" -eq "3" ] || [ "$#" -eq "4" ]; then
+	echo_success "Correct number of arguments received; language = \"$1\", implementation = \"$2\" and size = \"$3\"."
 else
 	echo_failure "Wrong number of arguments received: please refer to the quick help above."
+fi
+
+#############################################
+# Check that the language passed is correct #
+#############################################
+languages=("C" "FORTRAN");
+all_languages=`echo ${languages[@]}`;
+is_in_array languages $1
+language_retrieved=$?;
+if [ "${language_retrieved}" == "0" ]; then
+	echo_success "The language passed is correct.";
+else
+	echo_failure "The language '$1' is unknown. It must be one of: ${all_languages}.";
 fi
 
 ###################################################
@@ -90,12 +109,12 @@ fi
 ###################################################
 implementations=("serial" "openmp" "mpi" "hybrid" "openacc");
 all_implementations=`echo ${implementations[@]}`;
-is_in_array implementations $1
+is_in_array implementations $2
 implementation_retrieved=$?;
 if [ "${implementation_retrieved}" == "0" ]; then
 	echo_success "The implementation passed is correct.";
 else
-	echo_failure "The implementation '$1' is unknown. It must be one of: ${all_implementations}.";
+	echo_failure "The implementation '$2' is unknown. It must be one of: ${all_implementations}.";
 fi
 
 #########################################
@@ -103,44 +122,44 @@ fi
 #########################################
 sizes=("small" "big");
 all_sizes=`echo ${sizes[@]}`;
-is_in_array sizes $2
+is_in_array sizes $3
 size_retrieved=$?;
 if [ "${size_retrieved}" == "0" ]; then
 	echo_success "The size passed is correct.";
 else
-	echo_failure "The size '$2' is unknown. It must be one of: ${all_sizes}.";
+	echo_failure "The size '$3' is unknown. It must be one of: ${all_sizes}.";
 fi
 
 ################################################
 # Find command to issue to run the application #
 ################################################
 runner="";
-if [ "$1" == "mpi" ]; then
-	if [ "$2" == "small" ]; then
+if [ "$2" == "mpi" ]; then
+	if [ "$3" == "small" ]; then
 		runner="mpirun -n 4";
 	else
 		runner="mpirun -n 112";
 	fi
-elif [ "$1" == "openmp" ]; then
-	if [ "$2" == "small" ]; then
+elif [ "$2" == "openmp" ]; then
+	if [ "$3" == "small" ]; then
 		runner="OMP_NUM_THREADS=4";
 	else
 		runner="OMP_NUM_THREADS=28";
 	fi
-elif [ "$1" == "hybrid" ]; then
-	if [ "$2" == "small" ]; then
+elif [ "$2" == "hybrid" ]; then
+	if [ "$3" == "small" ]; then
 		runner="mpirun -n 2 -genv OMP_NUM_THREADS=2 -genv I_MPI_PIN_DOMAIN=omp";
 	else
 		runner="mpirun -n 8 -genv OMP_NUM_THREADS=14 -genv I_MPI_PIN_DOMAIN=omp";
 	fi
-elif [ "$1" == "openacc" ]; then
-	if [ "$2" == "small" ]; then
+elif [ "$2" == "openacc" ]; then
+	if [ "$3" == "small" ]; then
 		runner="";
 	else
 		runner="";
 	fi
 fi
-executable="./bin/$1_$2";
+executable="./bin/$1/$2_$3";
 if [ -f "${executable}" ]; then
 	echo_success "The executable ${executable} exists.";
 else
@@ -151,8 +170,9 @@ if [ -z "${runner}" ]; then
 else
 	command="${runner} ${executable}";
 fi
-if [ "$#" -eq "3" ]; then
-	command="${command} > $3";
+
+if [ "$#" -eq "4" ]; then
+	command="${command} > $4";
 fi
 
 echo_success "Command issued to run your application: \"${command}\"";

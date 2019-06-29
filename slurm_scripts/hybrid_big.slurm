@@ -6,4 +6,4 @@
 #SBATCH --time=00:02:00
 #SBATCH -A ac560tp
 set -x
-./run.sh hybrid big ${1}
+./run.sh ${1} hybrid big ${2}

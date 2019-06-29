@@ -6,4 +6,4 @@
 #SBATCH --time=00:00:10
 #SBATCH -A ac560tp
 set -x
-./run.sh openmp big ${1}
+./run.sh ${1} openmp big ${2}

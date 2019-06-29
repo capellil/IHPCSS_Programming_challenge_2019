@@ -6,4 +6,4 @@
 #SBATCH --time=00:02:00
 #SBATCH -A ac560tp
 set -x
-./run.sh mpi big ${1}
+./run.sh ${1} mpi big ${2}
