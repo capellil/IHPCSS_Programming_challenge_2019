@@ -7,18 +7,15 @@ MODULE util
     INTEGER, PARAMETER :: MAX_NUMBER_OF_ITERATIONS = 4000
     !> Number of iterations between two summary printings
     INTEGER, PARAMETER :: PRINT_FREQUENCY = 100
-    !> Temperature grid.
-    REAL*8, DIMENSION(0:ROWS+1,0:COLUMNS+1) :: temperature
-    !> Temperature grid from last iteration.
-    REAL*8, DIMENSION(0:ROWS+1,0:COLUMNS+1) :: temperature_last
 CONTAINS
     !> @brief Initialises the temperatures.
     !> @details Initialises the arrays temperature and temperature_last with the original temperature grid.
     !> @note This function must NOT be altered in ANY WAY.
-    SUBROUTINE initialise_temperatures()
+    SUBROUTINE initialise_temperatures(temperature, temperature_last)
         IMPLICIT NONE
 
         INTEGER :: i,j
+        REAL*8, DIMENSION(0:ROWS+1,0:COLUMNS+1) :: temperature, temperature_last
 
         !//////////////////////////////////////
         !// Previous iteration temperatures //
@@ -51,11 +48,12 @@ CONTAINS
     !> @brief Prints information used for tracking.
     !> @param[in] iter The iteration at which printing progress.
     !> @note This function must NOT be altered in ANY WAY.
-    SUBROUTINE track_progress(iter)
+    SUBROUTINE track_progress(iter, temperature)
         IMPLICIT NONE
 
         INTEGER :: i,iter
         INTEGER, PARAMETER :: number_of_cells = 6
+        REAL*8, DIMENSION(0:ROWS+1,0:COLUMNS+1) :: temperature
 
         IF (iter .eq. 100) THEN
             WRITE (*, '(A)', advance="no"), "ITERATION NUMBER"

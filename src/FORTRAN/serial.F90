@@ -20,9 +20,13 @@ PROGRAM serial
     DOUBLE PRECISION :: dt = 100.0
     !> Time taken during the entire simulation, in seconds
     REAL :: timer_simulation
+    !> Temperature grid.
+    REAL*8, DIMENSION(0:ROWS+1,0:COLUMNS+1) :: temperature
+    !> Temperature grid from last iteration.
+    REAL*8, DIMENSION(0:ROWS+1,0:COLUMNS+1) :: temperature_last
 
     ! Initialise temperatures and temperature_last including boundary conditions
-    CALL initialise_temperatures()
+    CALL initialise_temperatures(temperature, temperature_last)
 
     !///////////////////////////////////
     !// -- Code from here is timed -- //
@@ -54,14 +58,11 @@ PROGRAM serial
 
         ! Periodically print test values
         IF (mod(iteration, PRINT_FREQUENCY) .eq. 0) THEN
-            CALL track_progress(iteration)
+            CALL track_progress(iteration, temperature)
         ENDIF
     ENDDO
 
     CALL stop_timer(timer_simulation)
 
     CALL print_summary(iteration, dt, timer_simulation)
-
-    CONTAINS
-END program serial
-
+END PROGRAM serial

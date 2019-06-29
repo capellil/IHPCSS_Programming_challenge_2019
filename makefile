@@ -21,14 +21,16 @@ BIG_DEFINES=-DROWS=$(BIG_ROWS_GLOBAL) -DROWS_GLOBAL=$(BIG_ROWS_GLOBAL) -DCOLUMNS
 BIG_DEFINES_MPI=-DROWS=$(BIG_ROWS) -DROWS_GLOBAL=$(BIG_ROWS_GLOBAL) -DCOLUMNS=$(BIG_COLUMNS)
 BIG_DEFINES_HYBRID=-DROWS=$(BIG_ROWS_HYBRID) -DROWS_GLOBAL=$(BIG_ROWS_GLOBAL) -DCOLUMNS=$(BIG_COLUMNS)
 
-CC=icc
-MPICC=mpiicc
+CC=pgcc
+MPICC=mpicc -cc=$(CC)
 OPENACCCC=pgcc
-CFLAGS=-std=c99 -O2 -lm -Wall -Wextra
-PGICFLAGS=-c99 -O2 -acc
+#CFLAGS=-std=c99 -fastsse -lm -Wall -Wextra
+CFLAGS=-c99 -fastsse -lm
+PGICFLAGS=-c99 -fastsse -acc
 
-FORTRANC=ifort
-FORTRANFLAGS=-O2 -fpp
+FORTRANC=pgf90
+#FORTRANFLAGS=-fastsse -fpp -mcmodel=small
+FORTRANFLAGS=-fastsse
 
 default: help quick_compile
 
@@ -39,7 +41,7 @@ quick_compile: create_directories serial_versions openmp_versions mpi_versions h
 ################
 # SERIAL CODES #
 ################
-serial_versions: print_serial_compilation C_serial_small C_serial_big FORTRAN_serial_small
+serial_versions: print_serial_compilation C_serial_small C_serial_big FORTRAN_serial_small FORTRAN_serial_big
 
 print_serial_compilation:
 	@echo -e "\n/////////////////////////////"; \
@@ -54,14 +56,18 @@ C_serial_big: $(SRC_DIRECTORY)/$(C_DIRECTORY)/serial.c $(SRC_DIRECTORY)/$(C_DIRE
 	@echo -e "    - Challenge version ($(BIG_ROWS_GLOBAL)x$(BIG_COLUMNS))\n        \c";
 	$(CC) -o $(BIN_DIRECTORY)/$(C_DIRECTORY)/serial_big $(SRC_DIRECTORY)/$(C_DIRECTORY)/serial.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c $(CFLAGS) $(BIG_DEFINES) -DVERSION_RUN=\"serial_big\"
 
-FORTRAN_serial_small: $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/serial.f90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.f90
+FORTRAN_serial_small: $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/serial.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90
 	@echo -e "    - Test version ($(SMALL_ROWS_GLOBAL)x$(SMALL_COLUMNS))\n        \c";
-	$(FORTRANC) $(SMALL_DEFINES) -o $(BIN_DIRECTORY)/$(FORTRAN_DIRECTORY)/serial_small $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.f90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/serial.f90 $(FORTRANFLAGS) -DVERSION_RUN=\"serial_small\"
+	$(FORTRANC) $(SMALL_DEFINES) -o $(BIN_DIRECTORY)/$(FORTRAN_DIRECTORY)/serial_small $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/serial.F90 $(FORTRANFLAGS)  -DVERSION_RUN=\"serial_small\"
+
+FORTRAN_serial_big: $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/serial.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90
+	@echo -e "    - Challenge version ($(BIG_ROWS_GLOBAL)x$(BIG_COLUMNS))\n        \c";
+	$(FORTRANC) $(BIG_DEFINES) -o $(BIN_DIRECTORY)/$(FORTRAN_DIRECTORY)/serial_big $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/serial.F90 $(FORTRANFLAGS) -DVERSION_RUN=\"serial_big\"
 
 ################
 # OPENMP CODES #
 ################
-openmp_versions: print_openmp_compilation C_openmp_small C_openmp_big
+openmp_versions: print_openmp_compilation C_openmp_small C_openmp_big FORTRAN_openmp_small FORTRAN_openmp_big
 
 print_openmp_compilation:
 	@echo -e "\n/////////////////////////////"; \
@@ -70,11 +76,19 @@ print_openmp_compilation:
 
 C_openmp_small: $(SRC_DIRECTORY)/$(C_DIRECTORY)/openmp.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c
 	@echo -e "    - Test version ($(SMALL_ROWS_GLOBAL)x$(SMALL_COLUMNS))\n        \c";
-	$(CC) -o $(BIN_DIRECTORY)/$(C_DIRECTORY)/openmp_small $(SRC_DIRECTORY)/$(C_DIRECTORY)/openmp.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c $(CFLAGS) $(SMALL_DEFINES) -DVERSION_RUN=\"openmp_small\" -qopenmp
+	$(CC) -o $(BIN_DIRECTORY)/$(C_DIRECTORY)/openmp_small $(SRC_DIRECTORY)/$(C_DIRECTORY)/openmp.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c $(CFLAGS) $(SMALL_DEFINES) -DVERSION_RUN=\"openmp_small\" -mp
 
 C_openmp_big: $(SRC_DIRECTORY)/$(C_DIRECTORY)/openmp.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c
 	@echo -e "    - Challenge version ($(BIG_ROWS_GLOBAL)x$(BIG_COLUMNS))\n        \c";
-	$(CC) -o $(BIN_DIRECTORY)/$(C_DIRECTORY)/openmp_big $(SRC_DIRECTORY)/$(C_DIRECTORY)/openmp.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c $(CFLAGS) $(BIG_DEFINES) -DVERSION_RUN=\"openmp_big\" -qopenmp
+	$(CC) -o $(BIN_DIRECTORY)/$(C_DIRECTORY)/openmp_big $(SRC_DIRECTORY)/$(C_DIRECTORY)/openmp.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c $(CFLAGS) $(BIG_DEFINES) -DVERSION_RUN=\"openmp_big\" -mp
+
+FORTRAN_openmp_small: $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/openmp.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90
+	@echo -e "    - Test version ($(SMALL_ROWS_GLOBAL)x$(SMALL_COLUMNS))\n        \c";
+	$(FORTRANC) -o $(BIN_DIRECTORY)/$(FORTRAN_DIRECTORY)/openmp_small $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/openmp.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90 $(FORTRANFLAGS) $(SMALL_DEFINES) -DVERSION_RUN=\"openmp_small\" -mp
+
+FORTRAN_openmp_big: $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/openmp.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90
+	@echo -e "    - Test version ($(BIG_ROWS_GLOBAL)x$(BIG_COLUMNS))\n        \c";
+	$(FORTRANC) -o $(BIN_DIRECTORY)/$(FORTRAN_DIRECTORY)/openmp_big $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/openmp.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90 $(FORTRANFLAGS) $(BIG_DEFINES) -DVERSION_RUN=\"openmp_big\" -mp
 
 #############
 # MPI CODES #
@@ -106,11 +120,11 @@ print_hybrid_compilation:
 
 hybrid_small: $(SRC_DIRECTORY)/$(C_DIRECTORY)/hybrid.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c
 	@echo -e "    - Test version ($(SMALL_ROWS_GLOBAL)x$(SMALL_COLUMNS))\n        \c";
-	$(MPICC) -o $(BIN_DIRECTORY)/$(C_DIRECTORY)/hybrid_small $(SRC_DIRECTORY)/$(C_DIRECTORY)/hybrid.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c $(CFLAGS) $(SMALL_DEFINES_HYBRID) -qopenmp -DVERSION_RUN=\"hybrid_small\" -DVERSION_RUN_IS_MPI
+	$(MPICC) -o $(BIN_DIRECTORY)/$(C_DIRECTORY)/hybrid_small $(SRC_DIRECTORY)/$(C_DIRECTORY)/hybrid.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c $(CFLAGS) $(SMALL_DEFINES_HYBRID) -mp -DVERSION_RUN=\"hybrid_small\" -DVERSION_RUN_IS_MPI
 
 hybrid_big: $(SRC_DIRECTORY)/$(C_DIRECTORY)/hybrid.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c
 	@echo -e "    - Challenge version ($(BIG_ROWS_GLOBAL)x$(BIG_COLUMNS))\n        \c";
-	$(MPICC) -o $(BIN_DIRECTORY)/$(C_DIRECTORY)/hybrid_big $(SRC_DIRECTORY)/$(C_DIRECTORY)/hybrid.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c $(CFLAGS) $(BIG_DEFINES_HYBRID) -qopenmp -DVERSION_RUN=\"hybrid_big\" -DVERSION_RUN_IS_MPI
+	$(MPICC) -o $(BIN_DIRECTORY)/$(C_DIRECTORY)/hybrid_big $(SRC_DIRECTORY)/$(C_DIRECTORY)/hybrid.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c $(CFLAGS) $(BIG_DEFINES_HYBRID) -mp -DVERSION_RUN=\"hybrid_big\" -DVERSION_RUN_IS_MPI
 
 #################
 # OPENACC CODES #
