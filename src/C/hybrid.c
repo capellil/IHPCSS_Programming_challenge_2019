@@ -34,7 +34,17 @@ int main(int argc, char *argv[])
     MPI_Status status;
 
     // The usual MPI startup routines
-    MPI_Init(&argc, &argv);
+	int provided;
+	MPI_Init_thread(&argc, &argv, MPI_THREAD_FUNNELED, &provided);
+	if(provided < MPI_THREAD_FUNNELED)
+    {
+        printf("The threading support level is lesser than that demanded.\n");
+        MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
+    }
+    else
+    {
+        printf("The threading support level corresponds to that demanded.\n");
+    }
     MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
     MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
 
@@ -70,6 +80,7 @@ int main(int argc, char *argv[])
         iteration++;
 
         // Main calculation: average my four neighbours
+		#pragma omp parallel for
         for(unsigned int i = 1; i <= ROWS; i++)
         {
             for(unsigned int j = 1; j <= COLUMNS; j++)
@@ -87,7 +98,8 @@ int main(int argc, char *argv[])
 
         // If we are not the last MPI process, we have a bottom neighbour
         if(my_rank != comm_size-1)
-        {             //unless we are bottom PE
+        {
+			// We send our bottom row to our bottom neighbour
             MPI_Send(&temperature[ROWS][1], COLUMNS, MPI_DOUBLE, my_rank+1, 0, MPI_COMM_WORLD);
         }
 
@@ -117,6 +129,7 @@ int main(int argc, char *argv[])
         ////////////////////////////////////
         dt = 0.0;
 
+		#pragma omp parallel for reduction(max:dt)
         for(unsigned int i = 1; i <= ROWS; i++)
         {
             for(unsigned int j = 1; j <= COLUMNS; j++)
