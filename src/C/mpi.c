@@ -87,7 +87,8 @@ int main(int argc, char *argv[])
 
         // If we are not the last MPI process, we have a bottom neighbour
         if(my_rank != comm_size-1)
-        {             //unless we are bottom PE
+        {
+			// We send our bottom row to our bottom neighbour
             MPI_Send(&temperature[ROWS][1], COLUMNS, MPI_DOUBLE, my_rank+1, 0, MPI_COMM_WORLD);
         }
 
