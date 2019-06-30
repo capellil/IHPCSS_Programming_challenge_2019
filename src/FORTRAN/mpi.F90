@@ -80,27 +80,27 @@ PROGRAM serial
         !// HALO SWAP PHASE //
         !////////////////////
 
-        ! If we are not the last MPI process, we have a bottom neighbour
+        ! If we are not the last MPI process, we have a right neighbour
         IF (my_rank /= comm_size-1) THEN
-            ! Send out bottom row to our bottom neighbour
+            ! Send out right row to our right neighbour
             CALL MPI_Send(temperature(1, COLUMNS), ROWS, MPI_DOUBLE_PRECISION, my_rank+1, 0, MPI_COMM_WORLD, ierr)
         ENDIF
 
-        ! If we are not the first MPI process, we have a top neighbour
+        ! If we are not the first MPI process, we have a left neighbour
         IF (my_rank /= 0) THEN
-            ! We receive the bottom row from that neighbour into our top halo
+            ! We receive the right row from that neighbour into our left halo
             CALL MPI_Recv(temperature_last(1, 0), ROWS, MPI_DOUBLE_PRECISION, my_rank-1, MPI_ANY_TAG, MPI_COMM_WORLD, status, ierr)
         ENDIF
 
-        ! If we are not the first MPI process, we have a top neighbour
+        ! If we are not the first MPI process, we have a left neighbour
         IF (my_rank /= 0) THEN
-            ! Send out top row to our top neighbour
+            ! Send out left row to our left neighbour
             CALL MPI_Send(temperature(1,1), ROWS, MPI_DOUBLE_PRECISION, my_rank-1, 0, MPI_COMM_WORLD, ierr)
         ENDIF
 
-        ! If we are not the last MPI process, we have a bottom neighbour
+        ! If we are not the last MPI process, we have a right neighbour
         IF (my_rank /= comm_size-1) THEN
-            ! We receive the top row from that neighbour into our bottom halo
+            ! We receive the left row from that neighbour into our right halo
             CALL MPI_Recv(temperature_last(1, COLUMNS+1), ROWS, MPI_DOUBLE_PRECISION, my_rank+1, MPI_ANY_TAG, MPI_COMM_WORLD, status, ierr)
         ENDIF
 
@@ -121,7 +121,7 @@ PROGRAM serial
         CALL MPI_Reduce(dt, dt_global, 1, MPI_DOUBLE_PRECISION, MPI_MAX, 0, MPI_COMM_WORLD, ierr);
         CALL MPI_Bcast(dt_global, 1, MPI_DOUBLE_PRECISION, 0, MPI_COMM_WORLD, ierr);
 
-        ! PeriodiCALLy print test values
+        ! Periodically print test values
         IF (mod(iteration, PRINT_FREQUENCY) .eq. 0) THEN
             IF (my_rank .eq. comm_size - 1) THEN
                 CALL track_progress(iteration, temperature)
@@ -134,7 +134,7 @@ PROGRAM serial
 
     IF (my_rank .eq. 0) THEN
         CALL stop_timer(timer_simulation)
-        CALL print_summary(iteration, dt, timer_simulation)
+        CALL print_summary(iteration, dt_global, timer_simulation)
     ENDIF
 
     CALL MPI_Finalize(ierr)
