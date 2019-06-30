@@ -74,6 +74,7 @@ PROGRAM serial
     DO WHILE ( dt_global > MAX_TEMP_ERROR .and. iteration <= MAX_NUMBER_OF_ITERATIONS)
         iteration = iteration+1
 
+        !$omp parallel do
         DO j=1,COLUMNS
             DO i=1,ROWS
                 temperature(i,j) = 0.25 * (temperature_last(i+1, j  ) + &
@@ -117,6 +118,7 @@ PROGRAM serial
         dt=0.0
 
         ! Copy grid to old grid for next iteration and find max change
+        !$omp parallel do reduction(max:dt)
         DO j=1,COLUMNS
             DO i=1,ROWS
                 dt = max(abs(temperature(i,j) - temperature_last(i,j)), dt)
