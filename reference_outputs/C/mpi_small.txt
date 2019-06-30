@@ -38,4 +38,4 @@ ITERATION   3200 |         97.15 |         97.82 |         98.42 |         98.95
 Language used: C.
 Version run: mpi_small.
 The maximum temperature change was reached at iteration 3264 was 0.009998997242981034
-Total time was 1.5 seconds.
+Total time was 0.8 seconds.

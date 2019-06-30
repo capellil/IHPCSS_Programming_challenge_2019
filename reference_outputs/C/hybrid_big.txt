@@ -1,5 +1,13 @@
+The threading support level corresponds to that demanded.
+The threading support level corresponds to that demanded.
+The threading support level corresponds to that demanded.
+The threading support level corresponds to that demanded.
+The threading support level corresponds to that demanded.
+The threading support level corresponds to that demanded.
+The threading support level corresponds to that demanded.
 Running on 8 MPI processes
 
+The threading support level corresponds to that demanded.
 ITERATION NUMBER | [14554,14554] | [14555,14555] | [14556,14556] | [14557,14557] | [14558,14558] | [14559,14559]
 -----------------+---------------+---------------+---------------+---------------+---------------+--------------
 ITERATION    100 |         63.71 |         73.05 |         81.75 |         89.26 |         95.06 |         98.74
@@ -41,4 +49,4 @@ ITERATION   3500 |         98.63 |         99.04 |         99.38 |         99.64
 Language used: C.
 Version run: hybrid_big.
 The maximum temperature change was reached at iteration 3586 was 0.009996974331912156
-Total time was 104.3 seconds.
+Total time was 90.8 seconds.

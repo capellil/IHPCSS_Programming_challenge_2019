@@ -39,4 +39,4 @@ ITERATION   3500 |         98.63 |         99.04 |         99.38 |         99.64
 Language used: C.
 Version run: openacc_big.
 The maximum temperature change was reached at iteration 3586 was 0.009996974331912156
-Total time was 95.8 seconds.
+Total time was 95.1 seconds.

@@ -1,3 +1,4 @@
+Application run using 4 OpenMP threads.
 ITERATION NUMBER | [  666,  666] | [  667,  667] | [  668,  668] | [  669,  669] | [  670,  670] | [  671,  671]
 -----------------+---------------+---------------+---------------+---------------+---------------+--------------
 ITERATION    100 |         63.12 |         72.47 |         81.22 |         88.81 |         94.76 |         98.63
@@ -36,4 +37,4 @@ ITERATION   3200 |         97.15 |         97.82 |         98.42 |         98.95
 Language used: C.
 Version run: openmp_small.
 The maximum temperature change was reached at iteration 3264 was 0.009998997242981034
-Total time was 1.5 seconds.
+Total time was 0.9 seconds.
