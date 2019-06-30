@@ -1,6 +1,12 @@
 !> @file util.h
 !> @brief This file contains the functions and variables that are common to all versions. It of course helps avoiding duplicate codes, but it also makes sure that all versions rely on an identical configuration.
 MODULE util
+    #ifdef VERSION_RUN_IS_MPI
+        USE mpi
+    #ENDIF
+
+    IMPLICIT NONE
+
     !> Largest permitted change in temp
     REAL, PARAMETER :: MAX_TEMP_ERROR = 0.01
     !> Max number of iterations.
@@ -15,33 +21,73 @@ CONTAINS
         IMPLICIT NONE
 
         INTEGER :: i,j
-        REAL*8, DIMENSION(0:ROWS+1,0:COLUMNS+1) :: temperature, temperature_last
+        DOUBLE PRECISION, DIMENSION(0:ROWS+1,0:COLUMNS+1) :: temperature, temperature_last
 
         !//////////////////////////////////////
         !// Previous iteration temperatures //
         !////////////////////////////////////
+        #ifdef VERSION_RUN_IS_MPI
+            INTEGER :: my_rank
+            INTEGER :: comm_size
+            INTEGER :: ierr
+            DOUBLE PRECISION :: tMin
+            DOUBLE PRECISION :: tMax
 
-        ! Default all values to 0.
-        temperature_last = 0.0
+            ! Retrieve my MPI information
+            CALL MPI_Comm_rank(MPI_COMM_WORLD, my_rank, ierr)
+            CALL MPI_Comm_size(MPI_COMM_WORLD, comm_size, ierr)
 
-        ! NOTE: these boundary conditions never change throughout run
+            ! Default all values to 0.
+            temperature_last = 0.0
 
-        ! Set left side to 0 and right to linear increase
-        DO i = 0, ROWS + 1
-         temperature_last(i,0) = 0.0
-         temperature_last(i,COLUMNS+1) = (100.0/ROWS) * i
-        ENDDO
+            !Left and Right Boundaries
+            IF (my_rank .eq. 0) THEN
+                DO i=0,ROWS+1
+                    temperature_last(i,0) = 0.0
+                ENDDO
+            ENDIF
 
-        ! Set top to 0 and bottom to linear increase
-        DO j = 0, COLUMNS + 1
-         temperature_last(0,j) = 0.0
-         temperature_last(ROWS+1,j) = ((100.0)/COLUMNS) * j
-        ENDDO
+            IF (my_rank .eq. comm_size - 1) THEN
+                WRITE (*,*) "There are ", ROWS, " rows."
+                DO i=0,ROWS+1
+                    temperature_last(i,COLUMNS+1) = (100.0/ROWS) * i
+                ENDDO
+            ENDIF
+
+            ! Top and Bottom Boundaries
+            tmin =  my_rank    * 100.0/comm_size
+            tmax = (my_rank+1) * 100.0/comm_size
+            DO j=0,COLUMNS+1
+                temperature_last(0,j) = 0.0
+                temperature_last(ROWS+1,j) = tmin + ((tmax-tmin)/COLUMNS) * j
+            ENDDO
+        #else
+            ! Default all values to 0.
+            temperature_last = 0.0
+
+            ! NOTE: these boundary conditions never change throughout run
+
+            ! Set left side to 0 and right to linear increase
+            DO i = 0, ROWS + 1
+             temperature_last(i,0) = 0.0
+             temperature_last(i,COLUMNS+1) = (100.0/ROWS) * i
+            ENDDO
+
+            ! Set top to 0 and bottom to linear increase
+            DO j = 0, COLUMNS + 1
+             temperature_last(0,j) = 0.0
+             temperature_last(ROWS+1,j) = ((100.0)/COLUMNS) * j
+            ENDDO
+        #ENDIF
         
         !/////////////////////////////////////
         !// Current iteration temperatures //
         !///////////////////////////////////
         temperature = temperature_last
+
+        #ifdef VERSION_RUN_IS_MPI
+            CALL MPI_Barrier(MPI_COMM_WORLD, ierr)
+        #ENDIF
 
     END SUBROUTINE initialise_temperatures
 
@@ -58,7 +104,11 @@ CONTAINS
         IF (iter .eq. 100) THEN
             WRITE (*, '(A)', advance="no"), "ITERATION NUMBER"
             DO i = number_of_cells, 1, -1
-                WRITE (*, '(A, I5, A, I5, A)', advance="no"), " | [", ROWS_GLOBAL-i, ",", COLUMNS-i, "]"
+                #ifdef VERSION_RUN_IS_MPI
+                    WRITE (*, '(A, I5, A, I5, A)', advance="no"), " | [", ROWS-i, ",", COLUMNS_GLOBAL-i, "]"
+                #else
+                    WRITE (*, '(A, I5, A, I5, A)', advance="no"), " | [", ROWS-i, ",", COLUMNS-i, "]"
+                #endif
             ENDDO
             WRITE (*, '(/, A)', advance="no"), "----------------"
             DO i = number_of_cells, 1, -1
