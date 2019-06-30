@@ -39,7 +39,7 @@ default: help quick_compile
 
 all: help documentation quick_compile 
 
-quick_compile: create_directories serial_versions openmp_versions mpi_versions hybrid_versions openacc_versions
+quick_compile: verify_modules create_directories serial_versions openmp_versions mpi_versions hybrid_versions openacc_versions
 
 ################
 # SERIAL CODES #
@@ -177,6 +177,12 @@ clean_objects:
 #############
 # UTILITIES #
 #############
+verify_modules:
+	@if ! type "pgcc" > /dev/null 2>&1; then \
+		echo "It looks like the PGI compiler is not loaded. Please issue: 'module avail 2>&1 | grep pgi | grep mpi'. Then, pick the most recent, on Bridges, you should probably find 'mpi/pgi_openmpi/19.4', load it (module load mpi/pgi_openmpi/19.4). You can now make again :)"; \
+		exit -1; \
+	fi
+
 create_directories:
 	@if [ ! -d $(BIN_DIRECTORY) ]; then mkdir $(BIN_DIRECTORY); fi; \
 	if [ ! -d $(BIN_DIRECTORY)/$(C_DIRECTORY) ]; then mkdir $(BIN_DIRECTORY)/$(C_DIRECTORY); fi; \
@@ -189,7 +195,6 @@ help:
 	echo "+-------------+------------------+--------------------+"; \
 	echo "| Generate the documentation     | make documentation |"; \
 	echo "| Delete all binaries            | make clean         |"; \
-	echo "| 'make: XXX: Command not found' | module load XXX    |"; \
 	echo "+-----------------------------------------------------+";
 
 clean: help
@@ -205,10 +210,4 @@ documentation: help
 	@echo -e "    - Generating doxygen... \c"; \
 	 doxygen > /dev/null 2>&1; \
 	 echo "done"; \
-	 echo -e "    - Compiling latex... \c"; \
-	 cd $(DOC_DIRECTORY)/latex; \
-	 make > /dev/null 2>&1; \
-	 cd ../..; \
-	 echo "done"; \
 	 echo "    - The HTML documentation is available in 'doc/html/index.xhtml'."; \
-	 echo "    - The PDF documentation is available in 'doc/latex/refman.pdf'."
