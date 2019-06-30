@@ -136,9 +136,9 @@ fi
 runner="";
 if [ "$2" == "mpi" ]; then
 	if [ "$3" == "small" ]; then
-		runner="mpirun -n 4";
+		runner="mpirun -n 4 -mca btl ^openib";
 	else
-		runner="mpirun -n 112";
+		runner="mpirun -n 112 -mca btl ^openib";
 	fi
 elif [ "$2" == "openmp" ]; then
 	if [ "$3" == "small" ]; then
@@ -148,9 +148,9 @@ elif [ "$2" == "openmp" ]; then
 	fi
 elif [ "$2" == "hybrid" ]; then
 	if [ "$3" == "small" ]; then
-		runner="mpirun -n 2 -genv OMP_NUM_THREADS=2 -genv I_MPI_PIN_DOMAIN=omp";
+		runner="mpirun -n 2 -x OMP_NUM_THREADS=2 -mca btl ^openib";
 	else
-		runner="mpirun -n 8 -genv OMP_NUM_THREADS=14 -genv I_MPI_PIN_DOMAIN=omp";
+		runner="mpirun -n 8 -x OMP_NUM_THREADS=14 -mca btl ^openib";
 	fi
 elif [ "$2" == "openacc" ]; then
 	if [ "$3" == "small" ]; then
