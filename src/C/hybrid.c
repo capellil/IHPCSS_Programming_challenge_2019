@@ -30,9 +30,6 @@ int main(int argc, char *argv[])
     int comm_size;
     // The rank of my MPI process
     int my_rank;
-    // Communication tags
-    const int DOWN = 100;
-    const int UP = 101 ;
     // Status returned by MPI calls
     MPI_Status status;
 
@@ -43,12 +40,12 @@ int main(int argc, char *argv[])
 
     if(strcmp(VERSION_RUN, "hybrid_small") == 0 && comm_size != 2)
     {
-        printf("The small version is meant to be run with 4 MPI processes, not %d.\n", comm_size);
+        printf("The small version is meant to be run with 2 MPI processes, not %d.\n", comm_size);
         MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
     }
     else if(strcmp(VERSION_RUN, "hybrid_big") == 0 && comm_size != 8)
     {
-        printf("The big version is meant to be run with 120 MPI processes, not %d.\n", comm_size);
+        printf("The big version is meant to be run with 8 MPI processes, not %d.\n", comm_size);
         MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
     }
 
@@ -91,28 +88,28 @@ int main(int argc, char *argv[])
         // If we are not the last MPI process, we have a bottom neighbour
         if(my_rank != comm_size-1)
         {             //unless we are bottom PE
-            MPI_Send(&temperature[ROWS][1], COLUMNS, MPI_DOUBLE, my_rank+1, DOWN, MPI_COMM_WORLD);
+            MPI_Send(&temperature[ROWS][1], COLUMNS, MPI_DOUBLE, my_rank+1, 0, MPI_COMM_WORLD);
         }
 
         // If we are not the first MPI process, we have a top neighbour
         if(my_rank != 0)
         {
             // We receive the bottom row from that neighbour into our top halo
-            MPI_Recv(&temperature_last[0][1], COLUMNS, MPI_DOUBLE, my_rank-1, DOWN, MPI_COMM_WORLD, &status);
+            MPI_Recv(&temperature_last[0][1], COLUMNS, MPI_DOUBLE, my_rank-1, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
         }
 
         // If we are not the first MPI process, we have a top neighbour
         if(my_rank != 0)
         {
             // Send out top row to our top neighbour
-            MPI_Send(&temperature[1][1], COLUMNS, MPI_DOUBLE, my_rank-1, UP, MPI_COMM_WORLD);
+            MPI_Send(&temperature[1][1], COLUMNS, MPI_DOUBLE, my_rank-1, 0, MPI_COMM_WORLD);
         }
 
         // If we are not the last MPI process, we have a bottom neighbour
         if(my_rank != comm_size-1)
         {   
             // We receive the top row from that neighbour into our bottom halo
-            MPI_Recv(&temperature_last[ROWS+1][1], COLUMNS, MPI_DOUBLE, my_rank+1, UP, MPI_COMM_WORLD, &status);
+            MPI_Recv(&temperature_last[ROWS+1][1], COLUMNS, MPI_DOUBLE, my_rank+1, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
         }
 
         //////////////////////////////////////
