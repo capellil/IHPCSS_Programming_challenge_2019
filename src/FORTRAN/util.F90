@@ -1,14 +1,14 @@
 !> @file util.h
 !> @brief This file contains the functions and variables that are common to all versions. It of course helps avoiding duplicate codes, but it also makes sure that all versions rely on an identical configuration.
 MODULE util
-    #ifdef VERSION_RUN_IS_MPI
+    #IFDEF VERSION_RUN_IS_MPI
         USE mpi
     #ENDIF
 
     IMPLICIT NONE
 
     !> Largest permitted change in temp
-    REAL, PARAMETER :: MAX_TEMP_ERROR = 0.01
+    DOUBLE PRECISION, PARAMETER :: MAX_TEMP_ERROR = 0.01
     !> Max number of iterations.
     INTEGER, PARAMETER :: MAX_NUMBER_OF_ITERATIONS = 4000
     !> Number of iterations between two summary printings
@@ -26,7 +26,7 @@ CONTAINS
         !//////////////////////////////////////
         !// Previous iteration temperatures //
         !////////////////////////////////////
-        #ifdef VERSION_RUN_IS_MPI
+        #IFDEF VERSION_RUN_IS_MPI
             INTEGER :: my_rank
             INTEGER :: comm_size
             INTEGER :: ierr
@@ -48,7 +48,6 @@ CONTAINS
             ENDIF
 
             IF (my_rank .eq. comm_size - 1) THEN
-                WRITE (*,*) "There are ", ROWS, " rows."
                 DO i=0,ROWS+1
                     temperature_last(i,COLUMNS+1) = (100.0/ROWS) * i
                 ENDDO
@@ -61,7 +60,7 @@ CONTAINS
                 temperature_last(0,j) = 0.0
                 temperature_last(ROWS+1,j) = tmin + ((tmax-tmin)/COLUMNS) * j
             ENDDO
-        #else
+        #ELSE
             ! Default all values to 0.
             temperature_last = 0.0
 
@@ -85,7 +84,7 @@ CONTAINS
         !///////////////////////////////////
         temperature = temperature_last
 
-        #ifdef VERSION_RUN_IS_MPI
+        #IFDEF VERSION_RUN_IS_MPI
             CALL MPI_Barrier(MPI_COMM_WORLD, ierr)
         #ENDIF
 
@@ -99,16 +98,16 @@ CONTAINS
 
         INTEGER :: i,iter
         INTEGER, PARAMETER :: number_of_cells = 6
-        REAL*8, DIMENSION(0:ROWS+1,0:COLUMNS+1) :: temperature
+        DOUBLE PRECISION, DIMENSION(0:ROWS+1,0:COLUMNS+1) :: temperature
 
         IF (iter .eq. 100) THEN
             WRITE (*, '(A)', advance="no"), "ITERATION NUMBER"
             DO i = number_of_cells, 1, -1
-                #ifdef VERSION_RUN_IS_MPI
+                #IFDEF VERSION_RUN_IS_MPI
                     WRITE (*, '(A, I5, A, I5, A)', advance="no"), " | [", ROWS-i, ",", COLUMNS_GLOBAL-i, "]"
-                #else
+                #ELSE
                     WRITE (*, '(A, I5, A, I5, A)', advance="no"), " | [", ROWS-i, ",", COLUMNS-i, "]"
-                #endif
+                #ENDIF
             ENDDO
             WRITE (*, '(/, A)', advance="no"), "----------------"
             DO i = number_of_cells, 1, -1
