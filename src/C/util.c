@@ -106,7 +106,11 @@ void track_progress(int iteration)
 		printf("ITERATION NUMBER");
 		for(int i = number_of_cells; i > 0; i--)
 		{
-			printf(" | [%5d,%5d]", ROWS_GLOBAL-i, COLUMNS-i);
+			#ifdef VERSION_RUN_IS_MPI
+				printf(" | [%5d,%5d]", ROWS_GLOBAL-i, COLUMNS-i);
+			#else
+				printf(" | [%5d,%5d]", ROWS-i, COLUMNS-i);
+			#endif
 		}
 		printf("\n");
 		printf("----------------");
