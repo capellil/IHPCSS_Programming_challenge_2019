@@ -113,4 +113,4 @@ else
 	echo_failure "The corresponding submission script \"${slurm_script_to_submit}\"has not been found."
 fi
 
-sbatch ${slurm_script_to_submit} $4
+sbatch ${slurm_script_to_submit} $1 $4
