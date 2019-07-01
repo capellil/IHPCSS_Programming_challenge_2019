@@ -4,15 +4,13 @@ You are taking part to the [International High-Performance Computing Summer Scho
 
 ## What is the challenge? ##
 
-The calculations performed in this Laplace application consist in propagating the temperature from a cell to its neighbours until it stabilises and no longer varies. Initially, the temperatures are defaulted as 0 except:
-* The bottom-right corner which starts at 100 degrees.
-* The right boundary, where the temperature linearly decreases from 100 to 0 as we move upward.
-* The bottom boundary, where the temperature linearly decreases from 100 to 0 as we move leftward.
+This challenge introduces a simple problem: placing heating elements against a metal plate and simulate the temperature propagation across that metal plate. As the simulation progresses, the temperature across the metal plate stabilises; in other words, the total temperature variation tends towards 0. To put an end to the simulation, we determine a threshold under which we consider the simulation as converged. This is illustrated in the GIF animation below:
 
-The illustration below shows the initial temperature values. The boundaries are represented outside the square with the thick border, the cells to process are inside that same square.
 <p>
   <img src="images/Animation_intro.gif" alt="drawing" width="600"/>
 </p>
+
+For the challenge we take a metal plate of 14560x14560 and a threshold of 0.01. We know that, in this configuration, the simulation takes 3586 iterations to converge. Your job? Make that simulation as fast as you can.
 
 ## What is this repository for? ##
 
