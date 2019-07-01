@@ -11,7 +11,7 @@ The calculations performed in this Laplace application consist in propagating th
 
 The illustration below shows the initial temperature values. The boundaries are represented outside the square with the thick border, the cells to process are inside that same square.
 <p>
-  <img src="images/Laplace.svg" alt="drawing" width="400"/>
+  <img src="images/Animation_intro.gif" alt="drawing" width="600"/>
 </p>
 
 ## What is this repository for? ##
