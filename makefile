@@ -25,13 +25,11 @@ BIG_DEFINES_HYBRID_FORTRAN=-DROWS=$(BIG_GLOBAL) -DCOLUMNS_GLOBAL=$(BIG_GLOBAL) -
 
 CC=pgcc
 MPICC=mpicc
-OPENACCCC=$(MPICC)
 CFLAGS=-c99 -fastsse -lm
 PGICFLAGS=-c99 -fastsse -acc
 
 FORTRANC=pgf90
 MPIF90=mpif90
-OPENACCFORTRANC=$(MPIF90)
 FORTRANFLAGS=-fastsse
 PGIFORTRANFLAGS=-fastsse -acc
 
@@ -52,19 +50,19 @@ print_serial_compilation:
 	 echo "///////////////////////////";
 
 C_serial_small: $(SRC_DIRECTORY)/$(C_DIRECTORY)/serial.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c
-	@echo -e "    - Test version ($(SMALL_ROWS_GLOBAL)x$(SMALL_COLUMNS))\n        \c";
+	@echo -e "    - Test version ($(SMALL_GLOBAL)x$(SMALL_GLOBAL))\n        \c";
 	$(CC) -o $(BIN_DIRECTORY)/$(C_DIRECTORY)/serial_small $(SRC_DIRECTORY)/$(C_DIRECTORY)/serial.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c $(CFLAGS) $(SMALL_DEFINES) -DVERSION_RUN=\"serial_small\"
 
 C_serial_big: $(SRC_DIRECTORY)/$(C_DIRECTORY)/serial.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c
-	@echo -e "    - Challenge version ($(BIG_ROWS_GLOBAL)x$(BIG_COLUMNS))\n        \c";
+	@echo -e "    - Challenge version ($(BIG_GLOBAL)x$(BIG_GLOBAL))\n        \c";
 	$(CC) -o $(BIN_DIRECTORY)/$(C_DIRECTORY)/serial_big $(SRC_DIRECTORY)/$(C_DIRECTORY)/serial.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c $(CFLAGS) $(BIG_DEFINES) -DVERSION_RUN=\"serial_big\"
 
 FORTRAN_serial_small: $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/serial.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90
-	@echo -e "    - Test version ($(SMALL_ROWS_GLOBAL)x$(SMALL_COLUMNS))\n        \c";
+	@echo -e "    - Test version ($(SMALL_GLOBAL)x$(SMALL_GLOBAL))\n        \c";
 	$(FORTRANC) $(SMALL_DEFINES) -o $(BIN_DIRECTORY)/$(FORTRAN_DIRECTORY)/serial_small $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/serial.F90 $(FORTRANFLAGS)  -DVERSION_RUN=\"serial_small\"
 
 FORTRAN_serial_big: $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/serial.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90
-	@echo -e "    - Challenge version ($(BIG_ROWS_GLOBAL)x$(BIG_COLUMNS))\n        \c";
+	@echo -e "    - Challenge version ($(BIG_GLOBAL)x$(BIG_GLOBAL))\n        \c";
 	$(FORTRANC) $(BIG_DEFINES) -o $(BIN_DIRECTORY)/$(FORTRAN_DIRECTORY)/serial_big $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/serial.F90 $(FORTRANFLAGS) -DVERSION_RUN=\"serial_big\"
 
 ################
@@ -78,20 +76,20 @@ print_openmp_compilation:
 	 echo "///////////////////////////";
 
 C_openmp_small: $(SRC_DIRECTORY)/$(C_DIRECTORY)/openmp.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c
-	@echo -e "    - Test version ($(SMALL_ROWS_GLOBAL)x$(SMALL_COLUMNS))\n        \c";
+	@echo -e "    - Test version ($(SMALL_GLOBAL)x$(SMALL_GLOBAL))\n        \c";
 	$(CC) -o $(BIN_DIRECTORY)/$(C_DIRECTORY)/openmp_small $(SRC_DIRECTORY)/$(C_DIRECTORY)/openmp.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c $(CFLAGS) $(SMALL_DEFINES) -DVERSION_RUN=\"openmp_small\" -mp
 
 C_openmp_big: $(SRC_DIRECTORY)/$(C_DIRECTORY)/openmp.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c
-	@echo -e "    - Challenge version ($(BIG_ROWS_GLOBAL)x$(BIG_COLUMNS))\n        \c";
+	@echo -e "    - Challenge version ($(BIG_GLOBAL)x$(BIG_GLOBAL))\n        \c";
 	$(CC) -o $(BIN_DIRECTORY)/$(C_DIRECTORY)/openmp_big $(SRC_DIRECTORY)/$(C_DIRECTORY)/openmp.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c $(CFLAGS) $(BIG_DEFINES) -DVERSION_RUN=\"openmp_big\" -mp
 
 FORTRAN_openmp_small: $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/openmp.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90
-	@echo -e "    - Test version ($(SMALL_ROWS_GLOBAL)x$(SMALL_COLUMNS))\n        \c";
-	$(FORTRANC) -o $(BIN_DIRECTORY)/$(FORTRAN_DIRECTORY)/openmp_small $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/openmp.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90 $(FORTRANFLAGS) $(SMALL_DEFINES) -DVERSION_RUN=\"openmp_small\" -mp
+	@echo -e "    - Test version ($(SMALL_GLOBAL)x$(SMALL_GLOBAL))\n        \c";
+	$(FORTRANC) -o $(BIN_DIRECTORY)/$(FORTRAN_DIRECTORY)/openmp_small $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/openmp.F90 $(FORTRANFLAGS) $(SMALL_DEFINES) -DVERSION_RUN=\"openmp_small\" -mp
 
 FORTRAN_openmp_big: $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/openmp.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90
-	@echo -e "    - Test version ($(BIG_ROWS_GLOBAL)x$(BIG_COLUMNS))\n        \c";
-	$(FORTRANC) -o $(BIN_DIRECTORY)/$(FORTRAN_DIRECTORY)/openmp_big $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/openmp.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90 $(FORTRANFLAGS) $(BIG_DEFINES) -DVERSION_RUN=\"openmp_big\" -mp
+	@echo -e "    - Test version ($(BIG_GLOBAL)x$(BIG_GLOBAL))\n        \c";
+	$(FORTRANC) -o $(BIN_DIRECTORY)/$(FORTRAN_DIRECTORY)/openmp_big $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/openmp.F90 $(FORTRANFLAGS) $(BIG_DEFINES) -DVERSION_RUN=\"openmp_big\" -mp
 
 #############
 # MPI CODES #
@@ -104,20 +102,20 @@ print_mpi_compilation:
 	 echo "////////////////////////";
 
 C_mpi_small: $(SRC_DIRECTORY)/$(C_DIRECTORY)/mpi.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c
-	@echo -e "    - Test version ($(SMALL_ROWS_GLOBAL)x$(SMALL_COLUMNS))\n        \c";
+	@echo -e "    - Test version ($(SMALL_GLOBAL)x$(SMALL_GLOBAL))\n        \c";
 	$(MPICC) -o $(BIN_DIRECTORY)/$(C_DIRECTORY)/mpi_small $(SRC_DIRECTORY)/$(C_DIRECTORY)/mpi.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c $(CFLAGS) $(SMALL_DEFINES_MPI_C) -DVERSION_RUN=\"mpi_small\" -DVERSION_RUN_IS_MPI
 
 C_mpi_big: $(SRC_DIRECTORY)/$(C_DIRECTORY)/mpi.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c
-	@echo -e "    - Challenge version ($(BIG_ROWS_GLOBAL)x$(BIG_COLUMNS))\n        \c";
+	@echo -e "    - Challenge version ($(BIG_GLOBAL)x$(BIG_GLOBAL))\n        \c";
 	$(MPICC) -o $(BIN_DIRECTORY)/$(C_DIRECTORY)/mpi_big $(SRC_DIRECTORY)/$(C_DIRECTORY)/mpi.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c $(CFLAGS) $(BIG_DEFINES_MPI_C) -DVERSION_RUN=\"mpi_big\" -DVERSION_RUN_IS_MPI
 
 FORTRAN_mpi_small: $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/mpi.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90
-	@echo -e "    - Test version ($(SMALL_ROWS_GLOBAL)x$(SMALL_COLUMNS))\n        \c";
-	$(MPIF90) -o $(BIN_DIRECTORY)/$(FORTRAN_DIRECTORY)/mpi_small $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/mpi.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90 $(FORTRANFLAGS) $(SMALL_DEFINES_MPI_FORTRAN) -DVERSION_RUN=\"mpi_small\" -DVERSION_RUN_IS_MPI
+	@echo -e "    - Test version ($(SMALL_GLOBAL)x$(SMALL_GLOBAL))\n        \c";
+	$(MPIF90) -o $(BIN_DIRECTORY)/$(FORTRAN_DIRECTORY)/mpi_small $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/mpi.F90 $(FORTRANFLAGS) $(SMALL_DEFINES_MPI_FORTRAN) -DVERSION_RUN=\"mpi_small\" -DVERSION_RUN_IS_MPI
 
 FORTRAN_mpi_big: $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/mpi.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90
-	@echo -e "    - Test version ($(BIG_ROWS_GLOBAL)x$(BIG_COLUMNS))\n        \c";
-	$(MPIF90) -o $(BIN_DIRECTORY)/$(FORTRAN_DIRECTORY)/mpi_big $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/mpi.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90 $(FORTRANFLAGS) $(BIG_DEFINES_MPI_FORTRAN) -DVERSION_RUN=\"mpi_big\" -DVERSION_RUN_IS_MPI
+	@echo -e "    - Test version ($(BIG_GLOBAL)x$(BIG_GLOBAL))\n        \c";
+	$(MPIF90) -o $(BIN_DIRECTORY)/$(FORTRAN_DIRECTORY)/mpi_big $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/mpi.F90 $(FORTRANFLAGS) $(BIG_DEFINES_MPI_FORTRAN) -DVERSION_RUN=\"mpi_big\" -DVERSION_RUN_IS_MPI
 
 ################
 # HYBRID CODES #
@@ -130,20 +128,20 @@ print_hybrid_compilation:
 	 echo "///////////////////////////";
 
 C_hybrid_small: $(SRC_DIRECTORY)/$(C_DIRECTORY)/hybrid.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c
-	@echo -e "    - Test version ($(SMALL_ROWS_GLOBAL)x$(SMALL_COLUMNS))\n        \c";
+	@echo -e "    - Test version ($(SMALL_GLOBAL)x$(SMALL_GLOBAL))\n        \c";
 	$(MPICC) -o $(BIN_DIRECTORY)/$(C_DIRECTORY)/hybrid_small $(SRC_DIRECTORY)/$(C_DIRECTORY)/hybrid.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c $(CFLAGS) $(SMALL_DEFINES_HYBRID_C) -mp -DVERSION_RUN=\"hybrid_small\" -DVERSION_RUN_IS_MPI
 
 C_hybrid_big: $(SRC_DIRECTORY)/$(C_DIRECTORY)/hybrid.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c
-	@echo -e "    - Challenge version ($(BIG_ROWS_GLOBAL)x$(BIG_COLUMNS))\n        \c";
+	@echo -e "    - Challenge version ($(BIG_GLOBAL)x$(BIG_GLOBAL))\n        \c";
 	$(MPICC) -o $(BIN_DIRECTORY)/$(C_DIRECTORY)/hybrid_big $(SRC_DIRECTORY)/$(C_DIRECTORY)/hybrid.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c $(CFLAGS) $(BIG_DEFINES_HYBRID_C) -mp -DVERSION_RUN=\"hybrid_big\" -DVERSION_RUN_IS_MPI
 
 FORTRAN_hybrid_small: $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/hybrid.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90
-	@echo -e "    - Test version ($(SMALL_ROWS_GLOBAL)x$(SMALL_COLUMNS))\n        \c";
-	$(MPIF90) -o $(BIN_DIRECTORY)/$(FORTRAN_DIRECTORY)/hybrid_small $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/hybrid.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90 $(FORTRANFLAGS) $(SMALL_DEFINES_HYBRID_FORTRAN) -mp -DVERSION_RUN=\"hybrid_small\" -DVERSION_RUN_IS_MPI
+	@echo -e "    - Test version ($(SMALL_GLOBAL)x$(SMALL_GLOBAL))\n        \c";
+	$(MPIF90) -o $(BIN_DIRECTORY)/$(FORTRAN_DIRECTORY)/hybrid_small $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/hybrid.F90 $(FORTRANFLAGS) $(SMALL_DEFINES_HYBRID_FORTRAN) -mp -DVERSION_RUN=\"hybrid_small\" -DVERSION_RUN_IS_MPI
 
 FORTRAN_hybrid_big: $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/hybrid.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90
-	@echo -e "    - Test version ($(BIG_ROWS_GLOBAL)x$(BIG_COLUMNS))\n        \c";
-	$(MPIF90) -o $(BIN_DIRECTORY)/$(FORTRAN_DIRECTORY)/hybrid_big $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/hybrid.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90 $(FORTRANFLAGS) $(BIG_DEFINES_HYBRID_FORTRAN) -mp -DVERSION_RUN=\"hybrid_big\" -DVERSION_RUN_IS_MPI
+	@echo -e "    - Test version ($(BIG_GLOBAL)x$(BIG_GLOBAL))\n        \c";
+	$(MPIF90) -o $(BIN_DIRECTORY)/$(FORTRAN_DIRECTORY)/hybrid_big $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/hybrid.F90 $(FORTRANFLAGS) $(BIG_DEFINES_HYBRID_FORTRAN) -mp -DVERSION_RUN=\"hybrid_big\" -DVERSION_RUN_IS_MPI
 
 #################
 # OPENACC CODES #
@@ -156,20 +154,20 @@ print_openacc_compilation:
 	 echo "////////////////////////////";
 
 C_openacc_small: $(SRC_DIRECTORY)/$(C_DIRECTORY)/openacc.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c
-	@echo -e "    - Test version ($(SMALL_ROWS_GLOBAL)x$(SMALL_COLUMNS))\n        \c";
-	$(OPENACCCC) -o $(BIN_DIRECTORY)/$(C_DIRECTORY)/openacc_small $(SRC_DIRECTORY)/$(C_DIRECTORY)/openacc.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c $(PGICFLAGS) $(SMALL_DEFINES) -DVERSION_RUN=\"openacc_small\"
+	@echo -e "    - Test version ($(SMALL_GLOBAL)x$(SMALL_GLOBAL))\n        \c";
+	$(CC) -o $(BIN_DIRECTORY)/$(C_DIRECTORY)/openacc_small $(SRC_DIRECTORY)/$(C_DIRECTORY)/openacc.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c $(PGICFLAGS) $(SMALL_DEFINES) -DVERSION_RUN=\"openacc_small\"
 
 C_openacc_big: $(SRC_DIRECTORY)/$(C_DIRECTORY)/openacc.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c
-	@echo -e "    - Challenge version ($(BIG_ROWS_GLOBAL)x$(BIG_COLUMNS))\n        \c";
-	$(OPENACCCC) -o $(BIN_DIRECTORY)/$(C_DIRECTORY)/openacc_big $(SRC_DIRECTORY)/$(C_DIRECTORY)/openacc.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c $(PGICFLAGS) $(BIG_DEFINES) -DVERSION_RUN=\"openacc_big\"
+	@echo -e "    - Challenge version ($(BIG_GLOBAL)x$(BIG_GLOBAL))\n        \c";
+	$(CC) -o $(BIN_DIRECTORY)/$(C_DIRECTORY)/openacc_big $(SRC_DIRECTORY)/$(C_DIRECTORY)/openacc.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c $(PGICFLAGS) $(BIG_DEFINES) -DVERSION_RUN=\"openacc_big\"
 
 FORTRAN_openacc_small: $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/openacc.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90
-	@echo -e "    - Test version ($(SMALL_ROWS_GLOBAL)x$(SMALL_COLUMNS))\n        \c";
-	$(OPENACCFORTRANC) -o $(BIN_DIRECTORY)/$(FORTRAN_DIRECTORY)/openacc_small $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/openacc.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90 $(PGIFORTRANFLAGS) $(SMALL_DEFINES) -DVERSION_RUN=\"openacc_small\"
+	@echo -e "    - Test version ($(SMALL_GLOBAL)x$(SMALL_GLOBAL))\n        \c";
+	$(FORTRANC) -o $(BIN_DIRECTORY)/$(FORTRAN_DIRECTORY)/openacc_small $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/openacc.F90 $(PGIFORTRANFLAGS) $(SMALL_DEFINES) -DVERSION_RUN=\"openacc_small\"
 
 FORTRAN_openacc_big: $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/openacc.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90
-	@echo -e "    - Test version ($(BIG_ROWS_GLOBAL)x$(BIG_COLUMNS))\n        \c";
-	$(OPENACCFORTRANC) -o $(BIN_DIRECTORY)/$(FORTRAN_DIRECTORY)/openacc_big $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/openacc.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90 $(PGIFORTRANFLAGS) $(BIG_DEFINES) -DVERSION_RUN=\"openacc_big\"
+	@echo -e "    - Test version ($(BIG_GLOBAL)x$(BIG_GLOBAL))\n        \c";
+	$(FORTRANC) -o $(BIN_DIRECTORY)/$(FORTRAN_DIRECTORY)/openacc_big $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/openacc.F90 $(PGIFORTRANFLAGS) $(BIG_DEFINES) -DVERSION_RUN=\"openacc_big\"
 
 clean_objects:
 	@rm -f *.o *.mod;
