@@ -33,11 +33,11 @@ MPIF90=mpif90
 FORTRANFLAGS=-fastsse
 PGIFORTRANFLAGS=-fastsse -acc
 
-default: help quick_compile
+default: quick_compile
 
 all: help documentation quick_compile 
 
-quick_compile: verify_modules create_directories serial_versions openmp_versions mpi_versions hybrid_versions openacc_versions
+quick_compile: verify_modules help create_directories serial_versions openmp_versions mpi_versions hybrid_versions openacc_versions
 
 ################
 # SERIAL CODES #
@@ -177,7 +177,11 @@ clean_objects:
 #############
 verify_modules:
 	@if ! type "pgcc" > /dev/null 2>&1; then \
-		echo "It looks like the PGI compiler is not loaded. Please issue: 'module avail 2>&1 | grep pgi | grep mpi'. Then, pick the most recent, on Bridges, you should probably find 'mpi/pgi_openmpi/19.4', load it (module load mpi/pgi_openmpi/19.4). You can now make again :)"; \
+		clear; \
+		echo -e "\n    . "; \
+		echo -e "   / \\"; \
+		echo -e "  / ! \\"; \
+		echo -e " /_____\\ It looks like the PGI compiler is not loaded, on Bridges please issue 'module load mpi/pgi_openmpi/19.4'. You can now make again :)\n"; \
 		exit -1; \
 	fi
 
@@ -193,7 +197,7 @@ help:
 	echo "+-------------+------------------+--------------------+"; \
 	echo "| Generate the documentation     | make documentation |"; \
 	echo "| Delete all binaries            | make clean         |"; \
-	echo "+-----------------------------------------------------+";
+	echo -e "+-----------------------------------------------------+\n";
 
 clean: help
 	@echo -e "\n////////////////////////";
