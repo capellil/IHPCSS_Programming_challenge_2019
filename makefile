@@ -180,8 +180,8 @@ verify_modules:
 		clear; \
 		echo -e "\n    . "; \
 		echo -e "   / \\"; \
-		echo -e "  / ! \\"; \
-		echo -e " /_____\\ It looks like the PGI compiler is not loaded, on Bridges please issue 'module load mpi/pgi_openmpi/19.4'. You can now make again :)\n"; \
+		echo -e "  / ! \\  It looks like the PGI compiler is not loaded."; \
+		echo -e " /_____\\ On Bridges please issue 'module load mpi/pgi_openmpi/19.4'. You can now make again :)\n"; \
 		exit -1; \
 	fi
 
