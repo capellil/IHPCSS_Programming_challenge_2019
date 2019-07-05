@@ -15,7 +15,7 @@ For the challenge we take a metal plate of 14560x14560 and a threshold of 0.01. 
 ## What is this repository for? ##
 
 * You will find here everything you need to compete; source codes, makefiles, documentation, scripts, tests...
-* It allows you to start with a basic version of the code in each model: serial, OpenMP, MPI and OpenACC.
+* It allows you to start with a basic version of the code in each model: serial, OpenMP, MPI and OpenACC, MPI + OpenMP, MPI + OpenACC, each being available in both C and FORTRAN.
 * It provides you with a pre-setup experimental protocol that allows to compare experiments fairly.
 * This repository serves as the formal challenge setup; it makes sure contestants compete in the same conditions.
 
@@ -23,14 +23,22 @@ For the challenge we take a metal plate of 14560x14560 and a threshold of 0.01. 
 ### Download the source codes ###
 All you have to do is clone this repository: ```git clone https://github.com/capellil/IHPCSS_Coding_challenge.git```.
 
-It contains basic versions (serial, OpenMP, MPI, OpenACC and hybrid) for both C and FORTRAN languages.
-
 Note that you are strongly encouraged to work on the source files provided instead of making copies. To keep it short, you will discover in the sections below that multiple scripts have been written to make your life easier (makefile, running locally, submitting to compute nodes, verification). However, these scripts are designed to work with the files provided, not the arbitrary copies you could make.
 
-### Generate the binaries ###
-There is a makefile as you can see; it will compile all versions (serial, OpenMP, MPI, OpenACC etc...) and generate the corresponding binaries in a folder ```bin```. OpenACC requires the PGI compiler, so make sure you have the PGI module loaded (```module load pgi```) before you issue ```make```.
+### Compile the source codes ###
+There is a makefile as you can see; it will compile all versions (serial, OpenMP, MPI, OpenACC etc...) and generate the corresponding binaries in a folder ```bin```. OpenACC requires the PGI compiler, so we use the PGI compiler over all versions to keep things consistent. Make sure you load the right module with 'module load mpi/pgi_openmpi/19.4' before making, if you do not, the makefile will remind you.
 
-How does it work? Each version is compiled twice, once for the small grid and once for the big grid (see section below for definitions).
+What happens behind the scene?
+
+As you will quickly see, there is one folder for C source codes, one for FORTRAN source codes. Inside, each version has a specific file:
+* serial: serial.c | serial.F90
+* OpenMP: openmp.c | openmp.F90
+* OpenACC: openacc.c | openacc.F90
+* MPI: mpi.c | mpi.F90
+* MPI + OpenMP: hybrid_cpu.c | hybrid_cpu.F90
+* MPI + OpenACC: hybrid_gpu.c | hybrid_gpu.F90
+
+And of course, modify the file corresponding to the combination you want to work on. No need to make a copy, work on the original file, everything is version controlled remember.
 
 ### Run locally ###
 To make your life easier, a simple script has been written so you can launch your applications effortlessly: ```./run.sh LANGUAGE IMPLEMENTATION SIZE [OUTPUT_FILE]```.
@@ -68,23 +76,27 @@ How does it work? As you have probably seen, there is a ```reference_outputs``` 
 * automatically detect which language you used, which version is used, which grid size is used to automatically find the corresponding reference file
 * compare the number of iterations to reach convergence
 * compare the final temperature change
+* compare the halo swap verification cell value (for MPI versions only)
 * compare the total time and give your speed-up
 
-Example: you worked on the MPI version, you submitted it as follow: ```./submit.sh mpi big my_mpi_big_results.txt```. To verify your output file, just type ```./verify.sh my_mpi_big_results.txt```. This is an example of what you could get:
+Example: you worked on the MPI version, you submitted it as follow: ```./submit.sh C mpi big my_mpi_big_results.txt```. To verify your output file, just type ```./verify.sh my_mpi_big_results.txt```. This is an example of what you could get:
 ```
 ./verify.sh my_mpi_big_results.txt
-[SUCCESS] Correct number of arguments received; file to verify is "my_mpi_big_results.txt".
+[SUCCESS] Correct number of arguments received; file to verify is "your_outputs/my_mpi_big_results.txt".
 [SUCCESS] The file you passed exists.
+[SUCCESS] The language used has been retrieved: C.
 [SUCCESS] The version run has been retrieved: mpi_big.
-[SUCCESS] The reference file "reference_outputs/mpi_big.txt" has been retrieved.
-[SUCCESS] Both files have 43 lines.
+[SUCCESS] The reference file "reference_outputs/C/mpi_big.txt" has been retrieved.
+[SUCCESS] Both files have 45 lines.
 [SUCCESS] The temperature delta triggered the threshold at iteration 3586 for both.
 [SUCCESS] The final maximum change in temperature is 0.009996974331912156 for both.
-[TIMINGS] Your version is 1.26 times faster: 89.4s (you) vs 112.8s (reference).
+[SUCCESS] The halo swap verification cell value is 97.243705075613661393 for both.
+[TIMINGS] Your version is 1.43 times faster: 89.4s (you) vs 128.5s (reference).
 ```
 
 ## What kind of optimisations are not allowed? ##
 
+* Changing the compilation process (that is: using different compilers, compiler flags, external libraries etc...). The point in this challenge is not for you to read hundreds of pages of documentation to find an extra flag people may have missed.
 * Reducing the amount of work to be done such as ignoring the cells whose value will be zero during the entire simulation.
 * Removing the track_progress from the loop or changing the frequency at which it prints.
 * Bypassing the buffer copy using a pointer swap.
