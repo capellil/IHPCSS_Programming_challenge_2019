@@ -36,7 +36,7 @@ ITERATION   3100 |         97.11 |         97.79 |         98.40 |         98.94
 ITERATION   3200 |         97.15 |         97.82 |         98.42 |         98.95 |         99.42 |         99.82
 
 Language used: C.
-Version run: hybrid_small.
+Version run: hybrid_cpu_small.
 The maximum temperature change was reached at iteration 3264 was 0.009998997242981034
 Total time was 2.3 seconds.
 Value of halo swap verification cell [335][671] is 49.012659745246587306

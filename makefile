@@ -37,7 +37,7 @@ default: quick_compile
 
 all: help documentation quick_compile 
 
-quick_compile: verify_modules help create_directories serial_versions openmp_versions mpi_versions hybrid_versions openacc_versions hybrid_gpu_versions clean_objects
+quick_compile: verify_modules help create_directories serial_versions openmp_versions mpi_versions hybrid_cpu_versions openacc_versions hybrid_gpu_versions clean_objects
 
 ################
 # SERIAL CODES #
@@ -117,31 +117,31 @@ FORTRAN_mpi_big: $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/mpi.F90 $(SRC_DIRECTORY)/
 	@echo -e "    - Challenge version ($(BIG_GLOBAL)x$(BIG_GLOBAL))\n        \c";
 	$(MPIF90) -o $(BIN_DIRECTORY)/$(FORTRAN_DIRECTORY)/mpi_big $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/mpi.F90 $(FORTRANFLAGS) $(BIG_DEFINES_MPI_FORTRAN) -DVERSION_RUN=\"mpi_big\" -DVERSION_RUN_IS_MPI
 
-################
-# HYBRID CODES #
-################
-hybrid_versions: print_hybrid_compilation C_hybrid_small C_hybrid_big FORTRAN_hybrid_small FORTRAN_hybrid_big
+####################
+# HYBRID CPU CODES #
+####################
+hybrid_cpu_versions: print_hybrid_cpu_compilation C_hybrid_cpu_small C_hybrid_cpu_big FORTRAN_hybrid_cpu_small FORTRAN_hybrid_cpu_big
 
-print_hybrid_compilation:
-	@echo -e "\n/////////////////////////////"; \
-	 echo "// COMPILING HYBRID CODES //"; \
-	 echo "///////////////////////////";
+print_hybrid_cpu_compilation:
+	@echo -e "\n/////////////////////////////////"; \
+	 echo "// COMPILING HYBRID CPU CODES //"; \
+	 echo "///////////////////////////////";
 
-C_hybrid_small: $(SRC_DIRECTORY)/$(C_DIRECTORY)/hybrid.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c
+C_hybrid_cpu_small: $(SRC_DIRECTORY)/$(C_DIRECTORY)/hybrid_cpu.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c
 	@echo -e "    - Test version ($(SMALL_GLOBAL)x$(SMALL_GLOBAL))\n        \c";
-	$(MPICC) -o $(BIN_DIRECTORY)/$(C_DIRECTORY)/hybrid_small $(SRC_DIRECTORY)/$(C_DIRECTORY)/hybrid.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c $(CFLAGS) $(SMALL_DEFINES_HYBRID_C) -mp -DVERSION_RUN=\"hybrid_small\" -DVERSION_RUN_IS_MPI
+	$(MPICC) -o $(BIN_DIRECTORY)/$(C_DIRECTORY)/hybrid_cpu_small $(SRC_DIRECTORY)/$(C_DIRECTORY)/hybrid_cpu.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c $(CFLAGS) $(SMALL_DEFINES_HYBRID_C) -mp -DVERSION_RUN=\"hybrid_cpu_small\" -DVERSION_RUN_IS_MPI
 
-C_hybrid_big: $(SRC_DIRECTORY)/$(C_DIRECTORY)/hybrid.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c
+C_hybrid_cpu_big: $(SRC_DIRECTORY)/$(C_DIRECTORY)/hybrid_cpu.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c
 	@echo -e "    - Challenge version ($(BIG_GLOBAL)x$(BIG_GLOBAL))\n        \c";
-	$(MPICC) -o $(BIN_DIRECTORY)/$(C_DIRECTORY)/hybrid_big $(SRC_DIRECTORY)/$(C_DIRECTORY)/hybrid.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c $(CFLAGS) $(BIG_DEFINES_HYBRID_C) -mp -DVERSION_RUN=\"hybrid_big\" -DVERSION_RUN_IS_MPI
+	$(MPICC) -o $(BIN_DIRECTORY)/$(C_DIRECTORY)/hybrid_cpu_big $(SRC_DIRECTORY)/$(C_DIRECTORY)/hybrid_cpu.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c $(CFLAGS) $(BIG_DEFINES_HYBRID_C) -mp -DVERSION_RUN=\"hybrid_cpu_big\" -DVERSION_RUN_IS_MPI
 
-FORTRAN_hybrid_small: $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/hybrid.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90
+FORTRAN_hybrid_cpu_small: $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/hybrid_cpu.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90
 	@echo -e "    - Test version ($(SMALL_GLOBAL)x$(SMALL_GLOBAL))\n        \c";
-	$(MPIF90) -o $(BIN_DIRECTORY)/$(FORTRAN_DIRECTORY)/hybrid_small $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/hybrid.F90 $(FORTRANFLAGS) $(SMALL_DEFINES_HYBRID_FORTRAN) -mp -DVERSION_RUN=\"hybrid_small\" -DVERSION_RUN_IS_MPI
+	$(MPIF90) -o $(BIN_DIRECTORY)/$(FORTRAN_DIRECTORY)/hybrid_cpu_small $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/hybrid_cpu.F90 $(FORTRANFLAGS) $(SMALL_DEFINES_HYBRID_FORTRAN) -mp -DVERSION_RUN=\"hybrid_cpu_small\" -DVERSION_RUN_IS_MPI
 
-FORTRAN_hybrid_big: $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/hybrid.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90
+FORTRAN_hybrid_cpu_big: $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/hybrid_cpu.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90
 	@echo -e "    - Challenge version ($(BIG_GLOBAL)x$(BIG_GLOBAL))\n        \c";
-	$(MPIF90) -o $(BIN_DIRECTORY)/$(FORTRAN_DIRECTORY)/hybrid_big $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/hybrid.F90 $(FORTRANFLAGS) $(BIG_DEFINES_HYBRID_FORTRAN) -mp -DVERSION_RUN=\"hybrid_big\" -DVERSION_RUN_IS_MPI
+	$(MPIF90) -o $(BIN_DIRECTORY)/$(FORTRAN_DIRECTORY)/hybrid_cpu_big $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/hybrid_cpu.F90 $(FORTRANFLAGS) $(BIG_DEFINES_HYBRID_FORTRAN) -mp -DVERSION_RUN=\"hybrid_cpu_big\" -DVERSION_RUN_IS_MPI
 
 #################
 # OPENACC CODES #
