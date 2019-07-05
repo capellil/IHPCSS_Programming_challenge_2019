@@ -63,6 +63,7 @@ PROGRAM serial
 
         ! Periodically print test values
         IF (mod(iteration, PRINT_FREQUENCY) .eq. 0) THEN
+            !$acc update host(temperature)
             CALL track_progress(iteration, temperature)
         ENDIF
     ENDDO
