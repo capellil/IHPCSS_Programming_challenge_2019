@@ -141,6 +141,7 @@ int main(int argc, char *argv[])
         }
     }
 
+
     // Slightly more accurate timing and cleaner output 
     MPI_Barrier(MPI_COMM_WORLD);
 
@@ -152,6 +153,13 @@ int main(int argc, char *argv[])
         stop_timer(&timer_simulation);
         print_summary(iteration, dt_global, timer_simulation);
     }
+	
+	// Print the halo swap verification cell value 
+	MPI_Barrier(MPI_COMM_WORLD);
+	if(my_rank == comm_size - 2)
+	{
+		printf("Value of halo swap verification cell [%d][%d] is %.18f\n", ROWS_GLOBAL - ROWS - 1, COLUMNS - 1, temperature[ROWS][COLUMNS]);
+	}
 
     MPI_Finalize();
 }

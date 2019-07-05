@@ -1,7 +1,5 @@
-The threading support level corresponds to that demanded.
 Running on 2 MPI processes
 
-The threading support level corresponds to that demanded.
 ITERATION NUMBER | [  666,  666] | [  667,  667] | [  668,  668] | [  669,  669] | [  670,  670] | [  671,  671]
 -----------------+---------------+---------------+---------------+---------------+---------------+--------------
 ITERATION    100 |         63.12 |         72.47 |         81.22 |         88.81 |         94.76 |         98.63
@@ -40,4 +38,5 @@ ITERATION   3200 |         97.15 |         97.82 |         98.42 |         98.95
 Language used: C.
 Version run: hybrid_small.
 The maximum temperature change was reached at iteration 3264 was 0.009998997242981034
-Total time was 1.5 seconds.
+Total time was 2.3 seconds.
+Value of halo swap verification cell [335][671] is 49.012659745246587306

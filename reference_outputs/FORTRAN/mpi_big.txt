@@ -41,4 +41,5 @@ ITERATION   3500 |         98.63 |         99.04 |         99.38 |         99.64
 Language used: FORTRAN.
 Version run: mpi_big.
 The maximum temperature change was reached at iteration 3586 was 0.009996974293862593
-Total time was 125.9 seconds.
+Total time was 131.4 seconds.
+Value of halo swap verification cell (14559, 14429) is 97.243701935421370308

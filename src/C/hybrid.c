@@ -41,10 +41,6 @@ int main(int argc, char *argv[])
         printf("The threading support level is lesser than that demanded.\n");
         MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
     }
-    else
-    {
-        printf("The threading support level corresponds to that demanded.\n");
-    }
     MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
     MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
 
@@ -164,6 +160,13 @@ int main(int argc, char *argv[])
         stop_timer(&timer_simulation);
         print_summary(iteration, dt_global, timer_simulation);
     }
+
+	// Print the halo swap verification cell value 
+	MPI_Barrier(MPI_COMM_WORLD);
+	if(my_rank == comm_size - 2)
+	{
+		printf("Value of halo swap verification cell [%d][%d] is %.18f\n", ROWS_GLOBAL - ROWS - 1, COLUMNS - 1, temperature[ROWS][COLUMNS]);
+	}
 
     MPI_Finalize();
 }

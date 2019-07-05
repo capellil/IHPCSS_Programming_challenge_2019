@@ -102,7 +102,16 @@ max_error_challenger=`cat "${challenger_file}" | grep "iteration" | cut -d ' ' -
 if [ "${max_error_reference}" = "${max_error_challenger}" ]; then
 	echo_success "The final maximum change in temperature is ${max_error_reference} for both."
 else
-	echo_failure "The final maximum change in temperature is different for both versions; ${max_error_reference} for the reference file vs ${max_error_challenger} for the file to verify."
+	echo_failure "The final maximum changes in temperature are different; ${max_error_reference} for the reference file vs ${max_error_challenger} for the file to verify."
+fi
+
+# Check the max error
+halo_swap_verification_reference=`cat "${reference_file}" | grep "verification" | cut -d ' ' -f 9`
+halo_swap_verification_challenger=`cat "${challenger_file}" | grep "verification" | cut -d ' ' -f 9`
+if [ "${halo_swap_verification_reference}" = "${halo_swap_verification_challenger}" ]; then
+	echo_success "The halo swap verification cell value is ${halo_swap_verification_reference} for both."
+else
+	echo_failure "The halo swap verification cell values are different; ${halo_swap_verification_reference} for the reference file vs ${halo_swap_verification_challenger} for the file to verify."
 fi
 
 # Compare times

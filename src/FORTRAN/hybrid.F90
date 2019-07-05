@@ -42,8 +42,6 @@ PROGRAM serial
     IF (provided .lt. MPI_THREAD_FUNNELED) THEN
         WRITE (*,*), "The threading support level is lesser than that demanded."
         CALL MPI_Abort(MPI_COMM_WORLD, -1, ierr)
-    ELSE
-        WRITE (*, *), "The threading support level corresponds to that demanded."
     ENDIF
     CALL MPI_Comm_size(MPI_COMM_WORLD, comm_size, ierr)
     CALL MPI_Comm_rank(MPI_COMM_WORLD, my_rank, ierr)
@@ -144,6 +142,12 @@ PROGRAM serial
     IF (my_rank .eq. 0) THEN
         CALL stop_timer(timer_simulation)
         CALL print_summary(iteration, dt_global, timer_simulation)
+    ENDIF
+
+    ! Print the halo swap verification cell value 
+    CALL MPI_Barrier(MPI_COMM_WORLD, ierr);
+    IF (my_rank .eq. comm_size - 2) THEN
+        WRITE (*, '(A, I0, A, I0, A, F21.18)'), "Value of halo swap verification cell (", ROWS - 1, ", ", COLUMNS_GLOBAL - COLUMNS - 1, ") is ", temperature(ROWS,COLUMNS)
     ENDIF
 
     CALL MPI_Finalize(ierr)

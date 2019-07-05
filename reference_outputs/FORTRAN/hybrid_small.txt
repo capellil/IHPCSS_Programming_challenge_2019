@@ -40,4 +40,5 @@ ITERATION   3200 |         97.15 |         97.82 |         98.42 |         98.95
 Language used: FORTRAN.
 Version run: hybrid_small.
 The maximum temperature change was reached at iteration 3264 was 0.009998997198444215
-Total time was 20.8 seconds.
+Total time was 4.7 seconds.
+Value of halo swap verification cell (671, 335) is 49.012659745246594412
