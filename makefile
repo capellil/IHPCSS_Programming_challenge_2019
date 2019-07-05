@@ -37,7 +37,7 @@ default: quick_compile
 
 all: help documentation quick_compile 
 
-quick_compile: verify_modules help create_directories serial_versions openmp_versions mpi_versions hybrid_versions openacc_versions
+quick_compile: verify_modules help create_directories serial_versions openmp_versions mpi_versions hybrid_versions openacc_versions hybrid_gpu_versions clean_objects
 
 ################
 # SERIAL CODES #
@@ -88,7 +88,7 @@ FORTRAN_openmp_small: $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/openmp.F90 $(SRC_DIR
 	$(FORTRANC) -o $(BIN_DIRECTORY)/$(FORTRAN_DIRECTORY)/openmp_small $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/openmp.F90 $(FORTRANFLAGS) $(SMALL_DEFINES) -DVERSION_RUN=\"openmp_small\" -mp
 
 FORTRAN_openmp_big: $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/openmp.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90
-	@echo -e "    - Test version ($(BIG_GLOBAL)x$(BIG_GLOBAL))\n        \c";
+	@echo -e "    - Challenge version ($(BIG_GLOBAL)x$(BIG_GLOBAL))\n        \c";
 	$(FORTRANC) -o $(BIN_DIRECTORY)/$(FORTRAN_DIRECTORY)/openmp_big $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/openmp.F90 $(FORTRANFLAGS) $(BIG_DEFINES) -DVERSION_RUN=\"openmp_big\" -mp
 
 #############
@@ -114,7 +114,7 @@ FORTRAN_mpi_small: $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/mpi.F90 $(SRC_DIRECTORY
 	$(MPIF90) -o $(BIN_DIRECTORY)/$(FORTRAN_DIRECTORY)/mpi_small $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/mpi.F90 $(FORTRANFLAGS) $(SMALL_DEFINES_MPI_FORTRAN) -DVERSION_RUN=\"mpi_small\" -DVERSION_RUN_IS_MPI
 
 FORTRAN_mpi_big: $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/mpi.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90
-	@echo -e "    - Test version ($(BIG_GLOBAL)x$(BIG_GLOBAL))\n        \c";
+	@echo -e "    - Challenge version ($(BIG_GLOBAL)x$(BIG_GLOBAL))\n        \c";
 	$(MPIF90) -o $(BIN_DIRECTORY)/$(FORTRAN_DIRECTORY)/mpi_big $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/mpi.F90 $(FORTRANFLAGS) $(BIG_DEFINES_MPI_FORTRAN) -DVERSION_RUN=\"mpi_big\" -DVERSION_RUN_IS_MPI
 
 ################
@@ -140,13 +140,13 @@ FORTRAN_hybrid_small: $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/hybrid.F90 $(SRC_DIR
 	$(MPIF90) -o $(BIN_DIRECTORY)/$(FORTRAN_DIRECTORY)/hybrid_small $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/hybrid.F90 $(FORTRANFLAGS) $(SMALL_DEFINES_HYBRID_FORTRAN) -mp -DVERSION_RUN=\"hybrid_small\" -DVERSION_RUN_IS_MPI
 
 FORTRAN_hybrid_big: $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/hybrid.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90
-	@echo -e "    - Test version ($(BIG_GLOBAL)x$(BIG_GLOBAL))\n        \c";
+	@echo -e "    - Challenge version ($(BIG_GLOBAL)x$(BIG_GLOBAL))\n        \c";
 	$(MPIF90) -o $(BIN_DIRECTORY)/$(FORTRAN_DIRECTORY)/hybrid_big $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/hybrid.F90 $(FORTRANFLAGS) $(BIG_DEFINES_HYBRID_FORTRAN) -mp -DVERSION_RUN=\"hybrid_big\" -DVERSION_RUN_IS_MPI
 
 #################
 # OPENACC CODES #
 #################
-openacc_versions: print_openacc_compilation C_openacc_small C_openacc_big FORTRAN_openacc_small FORTRAN_openacc_big clean_objects
+openacc_versions: print_openacc_compilation C_openacc_small C_openacc_big FORTRAN_openacc_small FORTRAN_openacc_big
 
 print_openacc_compilation:
 	@echo -e "\n//////////////////////////////"; \
@@ -166,8 +166,34 @@ FORTRAN_openacc_small: $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/openacc.F90 $(SRC_D
 	$(FORTRANC) -o $(BIN_DIRECTORY)/$(FORTRAN_DIRECTORY)/openacc_small $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/openacc.F90 $(PGIFORTRANFLAGS) $(SMALL_DEFINES) -DVERSION_RUN=\"openacc_small\"
 
 FORTRAN_openacc_big: $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/openacc.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90
-	@echo -e "    - Test version ($(BIG_GLOBAL)x$(BIG_GLOBAL))\n        \c";
+	@echo -e "    - Challenge version ($(BIG_GLOBAL)x$(BIG_GLOBAL))\n        \c";
 	$(FORTRANC) -o $(BIN_DIRECTORY)/$(FORTRAN_DIRECTORY)/openacc_big $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/openacc.F90 $(PGIFORTRANFLAGS) $(BIG_DEFINES) -DVERSION_RUN=\"openacc_big\"
+
+####################
+# HYBRID GPU CODES #
+####################
+hybrid_gpu_versions: print_hybrid_gpu_compilation C_hybrid_gpu_small C_hybrid_gpu_big FORTRAN_hybrid_gpu_small FORTRAN_hybrid_gpu_big
+
+print_hybrid_gpu_compilation:
+	@echo -e "\n/////////////////////////////////"; \
+	 echo "// COMPILING HYBRID GPU CODES //"; \
+	 echo "///////////////////////////////";
+
+C_hybrid_gpu_small: $(SRC_DIRECTORY)/$(C_DIRECTORY)/hybrid_gpu.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c
+	@echo -e "    - Test version ($(SMALL_GLOBAL)x$(SMALL_GLOBAL))\n        \c";
+	$(MPICC) -o $(BIN_DIRECTORY)/$(C_DIRECTORY)/hybrid_gpu_small $(SRC_DIRECTORY)/$(C_DIRECTORY)/hybrid_gpu.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c $(PGICFLAGS) $(SMALL_DEFINES_HYBRID_C) -mp -DVERSION_RUN=\"hybrid_gpu_small\" -DVERSION_RUN_IS_MPI
+
+C_hybrid_gpu_big: $(SRC_DIRECTORY)/$(C_DIRECTORY)/hybrid_gpu.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c
+	@echo -e "    - Test version ($(BIG_GLOBAL)x$(BIG_GLOBAL))\n        \c";
+	$(MPICC) -o $(BIN_DIRECTORY)/$(C_DIRECTORY)/hybrid_gpu_big $(SRC_DIRECTORY)/$(C_DIRECTORY)/hybrid_gpu.c $(SRC_DIRECTORY)/$(C_DIRECTORY)/util.c $(PGICFLAGS) $(BIG_DEFINES_HYBRID_C) -mp -DVERSION_RUN=\"hybrid_gpu_big\" -DVERSION_RUN_IS_MPI -Wl,-z,noexecstack
+
+FORTRAN_hybrid_gpu_small: $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/hybrid_gpu.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90
+	@echo -e "    - Test version ($(SMALL_GLOBAL)x$(SMALL_GLOBAL))\n        \c";
+	$(MPIF90) -o $(BIN_DIRECTORY)/$(FORTRAN_DIRECTORY)/hybrid_gpu_small $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/hybrid_gpu.F90 $(PGIFORTRANFLAGS) $(SMALL_DEFINES_HYBRID_FORTRAN) -mp -DVERSION_RUN=\"hybrid_gpu_small\" -DVERSION_RUN_IS_MPI
+
+FORTRAN_hybrid_gpu_big: $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/hybrid_gpu.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90
+	@echo -e "    - Challenge version ($(BIG_GLOBAL)x$(BIG_GLOBAL))\n        \c";
+	$(MPIF90) -o $(BIN_DIRECTORY)/$(FORTRAN_DIRECTORY)/hybrid_gpu_big $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/util.F90 $(SRC_DIRECTORY)/$(FORTRAN_DIRECTORY)/hybrid_gpu.F90 $(PGIFORTRANFLAGS) $(BIG_DEFINES_HYBRID_FORTRAN) -mp -DVERSION_RUN=\"hybrid_gpu_big\" -DVERSION_RUN_IS_MPI -Wl,-z,noexecstack
 
 clean_objects:
 	@rm -f *.o *.mod;

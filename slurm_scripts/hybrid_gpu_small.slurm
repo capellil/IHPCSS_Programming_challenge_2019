@@ -1,0 +1,10 @@
+#!/bin/bash
+
+#SBATCH --nodes=1
+#SBATCH --partition=GPU-shared
+#SBATCH --ntasks-per-node 2
+#SBATCH --time=00:00:10
+#SBATCH --gres=gpu:p100:2
+#SBATCH -A ac560tp
+set -x
+./run.sh ${1} hybrid_gpu small ${2}

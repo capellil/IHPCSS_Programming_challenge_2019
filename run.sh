@@ -19,7 +19,8 @@
 #                                                                              #
 # PARAMETERS                                                                   #
 # 1) Language: one of 'C' | 'FORTRAN'                                          #
-# 2) Technology: one of 'serial' | 'openmp' | 'mpi' | 'openacc' | 'hybrid'     #
+# 2) Technology: one of 'serial' | 'openmp' | 'mpi' | 'openacc' | 'hybrid' |   #
+#    'hybrig_gpu'                                                              #
 # 3) Size: one of 'small' | 'big'                                              #
 # 4) Output file: optional parameter indicating where to store the output. If  #
 #    no output file is given, the output is showed on the console.             #
@@ -77,7 +78,7 @@ clear;
 echo "Quick help:";
 echo -e "\t- This script is meant to be run as follows: './run.sh LANGUAGE IMPLEMENTATION SIZE [OUTPUT_FILE]'";
 echo -e "\t- LANGUAGE = 'C' | 'FORTRAN'";
-echo -e "\t- IMPLEMENTATION = 'serial' | 'openmp' | 'mpi' | 'hybrid' | 'openacc'";
+echo -e "\t- IMPLEMENTATION = 'serial' | 'openmp' | 'mpi' | 'hybrid' | 'openacc' | 'hybrid_gpu'";
 echo -e "\t- SIZE = 'small' | 'big'";
 echo -e "\t- OUTPUT_FILE = the path to the file in which store the output. If no output file is given, the output is printed in the console."
 echo -e "\t- Example: to run the C serial version on the small grid, run './run.sh C serial small'.\n";
@@ -107,7 +108,7 @@ fi
 ###################################################
 # Check that the implementation passed is correct #
 ###################################################
-implementations=("serial" "openmp" "mpi" "hybrid" "openacc");
+implementations=("serial" "openmp" "mpi" "hybrid" "openacc", "hybrid_gpu");
 all_implementations=`echo ${implementations[@]}`;
 is_in_array implementations $2
 implementation_retrieved=$?;
@@ -157,6 +158,12 @@ elif [ "$2" == "openacc" ]; then
 		runner="";
 	else
 		runner="";
+	fi
+elif [ "$2" == "hybrid_gpu" ]; then
+	if [ "$3" == "small" ]; then
+		runner="mpirun -n 2 -mca btl ^openib";
+	else
+		runner="mpirun -n 8 -mca btl ^openib";
 	fi
 fi
 executable="./bin/$1/$2_$3";

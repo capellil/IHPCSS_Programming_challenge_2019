@@ -48,7 +48,7 @@ clear;
 echo "Quick help:";
 echo "  - This script is meant to be submit as follows: './submit.sh LANGUAGE IMPLEMENTATION SIZE OUTPUT_FILE'";
 echo "  - LANGUAGE = 'C' | 'FORTRAN'";
-echo "  - IMPLEMENTATION = 'serial' | 'openmp' | 'mpi' | 'hybrid' | 'openacc'";
+echo "  - IMPLEMENTATION = 'serial' | 'openmp' | 'mpi' | 'hybrid' | 'openacc' | 'hybrid_gpu'";
 echo "  - SIZE = 'small' | 'big'";
 echo "  - OUTPUT_FILE = the path to the file in which store the output.";
 echo "  - Example: to submit the C serial version on the small grid, submit './submit.sh C serial small'.";
@@ -79,7 +79,7 @@ fi
 ###################################################
 # Check that the implementation passed is correct #
 ###################################################
-implementations=("serial" "openmp" "mpi" "hybrid" "openacc");
+implementations=("serial" "openmp" "mpi" "hybrid" "openacc" "hybrid_gpu");
 all_implementations=`echo ${implementations[@]}`;
 is_in_array implementations $2
 implementation_retrieved=$?;
