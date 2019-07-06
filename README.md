@@ -26,28 +26,34 @@ All you have to do is clone this repository: ```git clone https://github.com/cap
 Note that you are strongly encouraged to work on the source files provided instead of making copies. To keep it short, you will discover in the sections below that multiple scripts have been written to make your life easier (makefile, running locally, submitting to compute nodes, verification). However, these scripts are designed to work with the files provided, not the arbitrary copies you could make.
 
 ### Compile the source codes ###
-There is a makefile as you can see; it will compile all versions (serial, OpenMP, MPI, OpenACC etc...) and generate the corresponding binaries in a folder ```bin```. OpenACC requires the PGI compiler, so we use the PGI compiler over all versions to keep things consistent. Make sure you load the right module with 'module load mpi/pgi_openmpi/19.4' before making, if you do not, the makefile will remind you.
+There is a makefile as you can see; it will compile all versions (serial, OpenMP, MPI, OpenACC etc...) and generate the corresponding binaries in a folder ```bin```. OpenACC requires the PGI compiler, so we use the PGI compiler over all versions to keep things consistent. Make sure you load the right module with 'module load cuda/9.2 mpi/pgi_openmpi/19.4-nongpu' before making, if you do not, the makefile will remind you.
 
 What happens behind the scene?
 
 As you will quickly see, there is one folder for C source codes, one for FORTRAN source codes. Inside, each version has a specific file:
-* serial: serial.c | serial.F90
-* OpenMP: openmp.c | openmp.F90
-* OpenACC: openacc.c | openacc.F90
-* MPI: mpi.c | mpi.F90
-* MPI + OpenMP: hybrid_cpu.c | hybrid_cpu.F90
-* MPI + OpenACC: hybrid_gpu.c | hybrid_gpu.F90
+
+| Model | C version | FORTRAN version |
+|-------|-----------|-----------------|
+| serial | serial.c | serial.F90
+| OpenMP | openmp.c | openmp.F90
+| OpenACC | openacc.c | openacc.F90
+| MPI | mpi.c | mpi.F90
+| MPI + OpenMP | hybrid_cpu.c | hybrid_cpu.F90
+| MPI + OpenACC | hybrid_gpu.c | hybrid_gpu.F90
 
 And of course, modify the file corresponding to the combination you want to work on. No need to make a copy, work on the original file, everything is version controlled remember.
 
 ### Run locally ###
 To make your life easier, a simple script has been written so you can launch your applications effortlessly: ```./run.sh LANGUAGE IMPLEMENTATION SIZE [OUTPUT_FILE]```.
-  * LANGUAGE: the programming language to use, it must be either: ```C``` or ```FORTRAN```.
-  * IMPLEMENTATION: the source code version to use, it must be either ```serial```, ```openmp```, ```mpi```, ```hybrid``` or ```openacc```.
-  * SIZE: There are two grid sizes, a ```small``` for tests and a ```big``` for the challenge. The former converges in a handful of seconds; it is for you to test and debug your program quickly. Once you checked your implementation yields the correct result (you will see how to do this below), you can move to the latter one, which converges in approximately two minutes. It is against the ```big``` grid that your program will be run for the challenge.
-  * OUTPUT_FILE: optional parameter indicating in which file write the output generated. If no file is passed, the output is generated to the standard stream (your console).
 
-How does it work? As explained in section "Generate the binaries" above, there is one binary per technology per size. This script fetches the binary corresponding to the technology and size you passed, and runs it. This script is helpful because it takes care of launching the binary properly; setting ```OMP_NUM_THREADS``` if you use OpenMP, or invoking ```mpirun``` and setting the number of processes etc... Don't worry however, the script will tell you what command is issues to run the binary, so you will see how everything was invoked.
+| Parameter | Description |
+|-----------|-------------|
+| LANGUAGE | The programming language to use, it must be either: ```C``` or ```FORTRAN```
+| IMPLEMENTATION | The source code version to use, it must be either ```serial```, ```openmp```, ```mpi```, ```openacc```, ```hybrid_cpu``` or ```hybrid_gpu```. |
+| SIZE | There are two grid sizes, a ```small``` for tests and a ```big``` for the challenge. The former converges in a handful of seconds; it is for you to test and debug your program quickly. Once you checked your implementation yields the correct result (you will see how to do this below), you can move to the latter one, which converges in approximately two minutes. It is against the ```big``` grid that your program will be run for the challenge. |
+| OUTPUT_FILE | Optional parameter indicating in which file write the output generated. If no file is passed, the output is generated to the standard stream (your console). |
+
+How does it work? As explained in section "Compile the source codes" above, there is one binary per technology per size. This script fetches the binary corresponding to the technology and size you passed, and runs it. This script is helpful because it takes care of launching the binary properly; setting ```OMP_NUM_THREADS``` if you use OpenMP, or invoking ```mpirun``` and setting the number of processes etc... Don't worry however, the script will tell you what command is issues to run the binary, so you will see how everything was invoked.
 
 Example: you want to run the MPI version on the small grid, you thus type ```./run.sh mpi small```, this is an extract of what you will get:
 ```
