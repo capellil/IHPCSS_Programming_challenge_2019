@@ -71,7 +71,6 @@ PROGRAM serial
 
     ! 2 MPI processes per node, 2 GPUs per node, this makes sure that the 2 MPI processes don't use the same GPU
     number_of_acc_devices = acc_get_num_devices(1);
-    WRITE(*,*), "Number of ACC devices: ", number_of_acc_devices
     CALL acc_set_device_num(mod(my_local_rank, number_of_acc_devices), 1);
 
     ! Do until error is minimal or until maximum steps
