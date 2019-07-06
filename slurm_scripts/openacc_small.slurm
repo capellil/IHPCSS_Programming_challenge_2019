@@ -7,4 +7,5 @@
 #SBATCH --gres=gpu:p100:1
 #SBATCH -A ac560tp
 set -x
+module load cuda/9.2;
 ./run.sh ${1} openacc small ${2}

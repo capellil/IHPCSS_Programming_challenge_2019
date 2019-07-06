@@ -7,4 +7,5 @@
 #SBATCH --gres=gpu:p100:2
 #SBATCH -A ac560tp
 set -x
+module load cuda/9.2 mpi/pgi_openmpi/19.4-nongpu;
 ./run.sh ${1} hybrid_gpu small ${2}

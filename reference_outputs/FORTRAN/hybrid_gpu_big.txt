@@ -1,3 +1,5 @@
+Running on 8 MPI processes
+
 ITERATION NUMBER | [14554,14554] | [14555,14555] | [14556,14556] | [14557,14557] | [14558,14558] | [14559,14559]
 -----------------+---------------+---------------+---------------+---------------+---------------+-------------- 
 ITERATION    100 |         63.71 |         73.05 |         81.75 |         89.26 |         95.06 |         98.74 
@@ -37,6 +39,7 @@ ITERATION   3400 |         98.60 |         99.01 |         99.36 |         99.63
 ITERATION   3500 |         98.63 |         99.04 |         99.38 |         99.64 |         99.84 |         99.96 
 
 Language used: FORTRAN.
-Version run: openacc_big.
-The maximum temperature change was reached at iteration 3586 was 0.009996974418854165
-Total time was 96.0 seconds.
+Version run: hybrid_gpu_big.
+The maximum temperature change was reached at iteration 3586 was 0.009996974375376055
+Total time was 940.1 seconds.
+Value of halo swap verification cell (14559, 12739) is 85.851525286739885701

@@ -26,12 +26,12 @@ BIG_DEFINES_HYBRID_FORTRAN=-DROWS=$(BIG_GLOBAL) -DCOLUMNS_GLOBAL=$(BIG_GLOBAL) -
 CC=pgcc
 MPICC=mpicc
 CFLAGS=-c99 -fastsse -lm
-PGICFLAGS=-c99 -fastsse -acc
+PGICFLAGS=-c99 -fastsse -acc -ta=tesla,cuda9.2 
 
 FORTRANC=pgf90
 MPIF90=mpif90
 FORTRANFLAGS=-fastsse
-PGIFORTRANFLAGS=-fastsse -acc
+PGIFORTRANFLAGS=-fastsse -acc -ta=tesla,cuda9.2
 
 default: quick_compile
 
@@ -207,7 +207,7 @@ verify_modules:
 		echo -e "\n    . "; \
 		echo -e "   / \\"; \
 		echo -e "  / ! \\  It looks like the PGI compiler is not loaded."; \
-		echo -e " /_____\\ On Bridges please issue 'module load mpi/pgi_openmpi/19.4'. You can now make again :)\n"; \
+		echo -e " /_____\\ On Bridges please issue 'module load cuda/9.2 mpi/pgi_openmpi/19.4-nongpu'. You can now make again :)\n"; \
 		exit -1; \
 	fi
 
