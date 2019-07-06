@@ -108,7 +108,7 @@ fi
 ###################################################
 # Check that the implementation passed is correct #
 ###################################################
-implementations=("serial" "openmp" "mpi" "hybrid_cpu" "openacc", "hybrid_gpu");
+implementations=("serial" "openmp" "mpi" "hybrid_cpu" "openacc" "hybrid_gpu");
 all_implementations=`echo ${implementations[@]}`;
 is_in_array implementations $2
 implementation_retrieved=$?;
