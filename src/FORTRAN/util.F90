@@ -16,6 +16,8 @@ MODULE util
 CONTAINS
     !> @brief Initialises the temperatures.
     !> @details Initialises the arrays temperature and temperature_last with the original temperature grid.
+    !> @param[out] temperature The 2D array that contains the current iteration temperatures.
+    !> @param[out] temperature_last The 2D array that contains the last iteration temperatures.
     !> @note This function must NOT be altered in ANY WAY.
     SUBROUTINE initialise_temperatures(temperature, temperature_last)
         IMPLICIT NONE
@@ -92,6 +94,7 @@ CONTAINS
 
     !> @brief Prints information used for tracking.
     !> @param[in] iter The iteration at which printing progress.
+    !> @param[in] temperature The 2D array that contains the current iteration temperatures.
     !> @note This function must NOT be altered in ANY WAY.
     SUBROUTINE track_progress(iter, temperature)
         IMPLICIT NONE

@@ -15,12 +15,16 @@
 
 /**
  * @brief Runs the experiment.
- * @details The variables "temperature" and "temperature_last" are two arrays of doubles declared in util.h.
  * @pre The macro 'ROWS' contains the number of rows (excluding boundaries) per MPI process. It is a define passed as a compilation flag, see makefile.
  * @pre The macro 'COLUMNS' contains the number of columns (excluding boundaries). It is a define passed as a compilation flag, see makefile.
  **/
 int main(int argc, char *argv[])
 {
+	// Temperature grid.
+	double temperature[ROWS+2][COLUMNS+2];
+	// Temperature grid from last iteration
+	double temperature_last[ROWS+2][COLUMNS+2]; 
+	// Current iteration
     int iteration = 0;
     // Temperature change for our MPI process
     double dt;
@@ -55,7 +59,7 @@ int main(int argc, char *argv[])
     }
 
     // Initialise temperatures and temperature_last including boundary conditions
-    initialise_temperatures();
+    initialise_temperatures(temperature, temperature_last);
 
     ///////////////////////////////////
     // -- Code from here is timed -- //
@@ -136,7 +140,7 @@ int main(int argc, char *argv[])
         {
             if(my_rank == comm_size - 1)
             {
-                track_progress(iteration);
+                track_progress(iteration, temperature);
     	    }
         }
     }

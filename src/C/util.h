@@ -13,10 +13,6 @@
 /// Number of iterations between two summary printings
 #define PRINT_FREQUENCY 100
 
-/// Temperature grid.
-double temperature[ROWS+2][COLUMNS+2];
-/// Temperature grid from last iteration
-double temperature_last[ROWS+2][COLUMNS+2]; 
 /// Time taken during the entire simulation, in seconds
 double timer_simulation;
 
@@ -25,13 +21,14 @@ double timer_simulation;
  * @details Initialises the arrays temperature and temperature_last with the original temperature grid.
  * @note This function must NOT be altered in ANY WAY.
  **/
-void initialise_temperatures();
+void initialise_temperatures(double temperature[ROWS+2][COLUMNS+2], double temperature_last[ROWS+2][COLUMNS+2]);
 /**
  * @brief Prints information used for tracking.
  * @param[in] iter The iteration at which printing progress.
+ * @param[in] temperature The 2D array that contains the current iteration temperatures.
  * @note This function must NOT be altered in ANY WAY.
  **/
-void track_progress(int iter);
+void track_progress(int iter, double temperature[ROWS+2][COLUMNS+2]);
 /**
  * @brief Prints the time needed to complete the simulation as well as debugging information.
  * @details In addition to printing the total simulation time, it also prints the iteration at which convergence was reached as well as the last temperature delta observed. The first one is to evaluate performance while the last two help check program correctness.

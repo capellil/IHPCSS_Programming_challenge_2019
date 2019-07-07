@@ -11,7 +11,7 @@
 	#include <mpi.h>
 #endif
 
-void initialise_temperatures()
+void initialise_temperatures(double temperature[ROWS+2][COLUMNS+2], double temperature_last[ROWS+2][COLUMNS+2])
 {
 	//////////////////////////////////////
 	// Previous iteration temperatures //
@@ -98,7 +98,7 @@ void initialise_temperatures()
 	#endif
 }
 
-void track_progress(int iteration)
+void track_progress(int iteration, double temperature[ROWS+2][COLUMNS+2])
 {
 	int number_of_cells = 6;
 	if(iteration == 100)

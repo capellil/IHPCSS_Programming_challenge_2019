@@ -5,7 +5,6 @@
 !> @author Ludovic Capelli
 
 !> @brief Runs the experiment.
-!> @details The variables "temperature" and "temperature_last" are two arrays of doubles declared in util.h.
 !> @pre The macro 'ROWS' contains the number of rows (excluding boundaries). It is a define passed as a compilation flag, see makefile.
 !> @pre The macro 'COLUMNS' contains the number of columns (excluding boundaries). It is a define passed as a compilation flag, see makefile.
 PROGRAM serial
