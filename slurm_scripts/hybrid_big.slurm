@@ -4,6 +4,7 @@
 #SBATCH --partition=RM
 #SBATCH --ntasks-per-node 2
 #SBATCH --time=00:02:00
+#SBATCH --res challenge
 #SBATCH -A ac560tp
 set -x
 ./run.sh ${1} hybrid big ${2}
