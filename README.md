@@ -2,7 +2,7 @@
 
 You are taking part to the [International High-Performance Computing Summer School](https://ss19.ihpcss.org) coding challenge? That's where it starts!
 
-Table of contents
+## Table of contents ##
 
 * [What is the challenge](#what-is-the-challenge)
 * [What is this repository for?](#what-is-this-repository-for)
@@ -26,6 +26,7 @@ This challenge introduces a simple problem: placing heating elements against a m
 
 For the challenge we take a metal plate of 14560x14560 and a threshold of 0.01. We know that, in this configuration, the simulation takes 3586 iterations to converge. Your job? Make that simulation as fast as you can.
 
+[Go back to table of contents](#table-of-contents)
 ## What is this repository for? ##
 
 * You will find here everything you need to compete; source codes, makefiles, documentation, scripts, tests...
@@ -38,12 +39,14 @@ For the challenge we take a metal plate of 14560x14560 and a threshold of 0.01. 
   * MPI + OpenACC
 * It provides you with a pre-setup experimental protocol; it makes sure contestants compete in the same conditions and allows to compare experiments fairly.
 
+[Go back to table of contents](#table-of-contents)
 ## How do I get set up? ##
 ### Download the source codes ###
 All you have to do is clone this repository: ```git clone https://github.com/capellil/IHPCSS_Coding_challenge.git```.
 
 Note that you are strongly encouraged to work on the source files provided instead of making copies. To keep it short, you will discover in the sections below that multiple scripts have been written to make your life easier (makefile, running locally, submitting to compute nodes, verification). However, these scripts are designed to work with the files provided, not the arbitrary copies you could make.
 
+[Go back to table of contents](#table-of-contents)
 ### Compile the source codes ###
 There is a makefile as you can see; it will compile all versions (serial, OpenMP, MPI, OpenACC etc...) and generate the corresponding binaries in a folder ```bin```. OpenACC requires the PGI compiler, so we use the PGI compiler over all versions to keep things consistent. Make sure you load the right module with 'module load cuda/9.2 mpi/pgi_openmpi/19.4-nongpu' before making, if you do not, the makefile will remind you.
 
@@ -62,6 +65,7 @@ As you will quickly see, there is one folder for C source codes, one for FORTRAN
 
 And of course, modify the file corresponding to the combination you want to work on. No need to make a copy, work on the original file, everything is version controlled remember.
 
+[Go back to table of contents](#table-of-contents)
 ### Run locally ###
 To make your life easier, a simple script has been written so you can launch your applications effortlessly: ```./run.sh LANGUAGE IMPLEMENTATION SIZE [OUTPUT_FILE]```.
 
@@ -86,7 +90,8 @@ Example: you want to run the MPI version on the small grid, you thus type ```./r
 
 #### IMPORTANT ####
 On Bridges, you should not run ```big``` grid calculations locally but on the compute nodes (see next section). The node on which you program is the login node, it is meant for people to ssh and send jobs to the compute nodes, not run programs. Running the ```small``` grid calculations, something that finishes in maximum 5 seconds is okay, but trying to run the ```big``` grid calculations, therefore using 100% of all CPUs for minutes is a good way to make the login node lag and every other user in a bad mood.
-  
+
+[Go back to table of contents](#table-of-contents)
 ### Submit to Bridges compute nodes ###
 Similarly to the section "Run locally", a script has been written for you to easily submit your work to Bridges via SLURM: ```./submit.sh LANGUAGE IMPLEMENTATION SIZE OUTPUT_FILE```. The parameters LANGUAGE, IMPLEMENTATION and SIZE are identical to that passed to the ```run.sh``` script. The output file this time is no longer optional however, because you need a file to which redirect the output of your job.
 
@@ -94,6 +99,7 @@ How does it work? As you have probably seen, there is a ```slurm_scripts``` fold
 
 If you want to create your own SLURM submission script, there is an additional one called ```general.slurm```, which contains all the commands you may want to use along with their description. You will also find in that submission script links that will lead you to PSC webpages containing more information about submission scripts.
 
+[Go back to table of contents](#table-of-contents)
 ### Verification ###
 One more script to make your life easier and encapsulate all the verification process in a single command: ```./verify.sh YOUR_OUTPUT_FILE```.
 
@@ -121,6 +127,7 @@ Example: you worked on the MPI version, you submitted it as follow: ```./submit.
 [TIMINGS] Your version is 1.43 times faster: 89.4s (you) vs 128.5s (reference).
 ```
 
+[Go back to table of contents](#table-of-contents)
 ## What kind of optimisations are not allowed? ##
 
 * Changing the compilation process (that is: using different compilers, compiler flags, external libraries etc...). The point in this challenge is not for you to read hundreds of pages of documentation to find an extra flag people may have missed.
@@ -129,11 +136,15 @@ Example: you worked on the MPI version, you submitted it as follow: ```./submit.
 * Bypassing the buffer copy using a pointer swap.
 * Decreasing the accuracy of the calculations by switching from doubles to floats.
 
+[Go back to table of contents](#table-of-contents)
 ## Who do I talk to? ##
 
 * Repository owner
 * IHPCSS Coding Challenge organisers
 
+[Go back to table of contents](#table-of-contents)
 ## Acknowledgments ##
 * [John Urbanic](https://www.psc.edu/staff/urbanic)
 * [David Henty](https://www.epcc.ed.ac.uk/about/staff/dr-david-henty)
+
+[Go back to table of contents](#table-of-contents)
