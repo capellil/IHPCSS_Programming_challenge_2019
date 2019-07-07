@@ -2,9 +2,23 @@
 
 You are taking part to the [International High-Performance Computing Summer School](https://ss19.ihpcss.org) coding challenge? That's where it starts!
 
+Table of contents
+
+* [What is the challenge](#what-is-the-challenge)
+* [What is this repository for?](#what-is-this-repository-for)
+* [How do I get set up?](#how-do-i-get-set-up)
+  * [Download the source codes](#download-the-source-codes)
+  * [Compile the source codes](#compile-the-source-codes)
+  * [Run locally](#run-locally)
+  * [Submit to Bridges compute nodes](#submit-to-bridges-compute-nodes)
+  * [Verification](#verification)
+* [What kind of optimisations are not allowed?](#what-kind-of-optimisations-are-not-allowed)
+* [Who do I talk to](#who-do-i-talk-to)
+* [Acknowledgments](#acknowledgments)
+
 ## What is the challenge? ##
 
-This challenge introduces a simple problem: placing heating elements against a metal plate and simulate the temperature propagation across that metal plate. As the simulation progresses, the temperature across the metal plate stabilises; in other words, the total temperature variation tends towards 0. To put an end to the simulation, we determine a threshold under which we consider the simulation as converged. This is illustrated in the GIF animation below:
+This challenge introduces a simple problem: placing heating elements against a metal plate and simulate the temperature propagation across that metal plate. As the simulation progresses, the temperature across the metal plate stabilises; in other words, the total temperature variation tends towards 0. To put an end to the simulation, we determine a threshold for the temperature variation, under which we consider the simulation as converged. This is illustrated in the GIF animation below:
 
 <p>
   <img src="images/Animation_intro.gif" alt="drawing" width="600"/>
@@ -15,9 +29,14 @@ For the challenge we take a metal plate of 14560x14560 and a threshold of 0.01. 
 ## What is this repository for? ##
 
 * You will find here everything you need to compete; source codes, makefiles, documentation, scripts, tests...
-* It allows you to start with a basic version of the code in each model: serial, OpenMP, MPI and OpenACC, MPI + OpenMP, MPI + OpenACC, each being available in both C and FORTRAN.
-* It provides you with a pre-setup experimental protocol that allows to compare experiments fairly.
-* This repository serves as the formal challenge setup; it makes sure contestants compete in the same conditions.
+* You will also find a basic version of the source code in every model (available in both C and FORTRAN):
+  * serial
+  * OpenMP
+  * OpenACC
+  * MPI
+  * MPI + OpenMP
+  * MPI + OpenACC
+* It provides you with a pre-setup experimental protocol; it makes sure contestants compete in the same conditions and allows to compare experiments fairly.
 
 ## How do I get set up? ##
 ### Download the source codes ###
@@ -34,12 +53,12 @@ As you will quickly see, there is one folder for C source codes, one for FORTRAN
 
 | Model | C version | FORTRAN version |
 |-------|-----------|-----------------|
-| serial | serial.c | serial.F90
-| OpenMP | openmp.c | openmp.F90
-| OpenACC | openacc.c | openacc.F90
-| MPI | mpi.c | mpi.F90
-| MPI + OpenMP | hybrid_cpu.c | hybrid_cpu.F90
-| MPI + OpenACC | hybrid_gpu.c | hybrid_gpu.F90
+| serial | serial.c | serial.F90 |
+| OpenMP | openmp.c | openmp.F90 |
+| OpenACC | openacc.c | openacc.F90 |
+| MPI | mpi.c | mpi.F90 |
+| MPI + OpenMP | hybrid_cpu.c | hybrid_cpu.F90 |
+| MPI + OpenACC | hybrid_gpu.c | hybrid_gpu.F90 |
 
 And of course, modify the file corresponding to the combination you want to work on. No need to make a copy, work on the original file, everything is version controlled remember.
 
@@ -50,10 +69,10 @@ To make your life easier, a simple script has been written so you can launch you
 |-----------|-------------|
 | LANGUAGE | The programming language to use, it must be either: ```C``` or ```FORTRAN```
 | IMPLEMENTATION | The source code version to use, it must be either ```serial```, ```openmp```, ```mpi```, ```openacc```, ```hybrid_cpu``` or ```hybrid_gpu```. |
-| SIZE | There are two grid sizes, a ```small``` for tests and a ```big``` for the challenge. The former converges in a handful of seconds; it is for you to test and debug your program quickly. Once you checked your implementation yields the correct result (you will see how to do this below), you can move to the latter one, which converges in approximately two minutes. It is against the ```big``` grid that your program will be run for the challenge. |
+| SIZE | There are two grid sizes, a ```small``` for tests and a ```big``` for the challenge. The former converges in a handful of seconds; it is for you to test and debug your program quickly. Once you checked your implementation yields the correct result (you will see how below), you can move to the latter one, which converges in approximately two minutes for most cases. It is against the ```big``` grid that your program will be run for the challenge. |
 | OUTPUT_FILE | Optional parameter indicating in which file write the output generated. If no file is passed, the output is generated to the standard stream (your console). |
 
-How does it work? As explained in section "Compile the source codes" above, there is one binary per technology per size. This script fetches the binary corresponding to the technology and size you passed, and runs it. This script is helpful because it takes care of launching the binary properly; setting ```OMP_NUM_THREADS``` if you use OpenMP, or invoking ```mpirun``` and setting the number of processes etc... Don't worry however, the script will tell you what command is issues to run the binary, so you will see how everything was invoked.
+How does it work? As explained in section "Compile the source codes" above, there is one binary per technology per size. This script fetches the binary corresponding to the technology and size you passed, and runs it. This script is helpful because it takes care of launching the binary properly; setting ```OMP_NUM_THREADS``` if you use OpenMP, or invoking ```mpirun``` and setting the number of processes etc... Don't worry however, the script is totally transparent; it tells what command it issues so you see how everything was invoked.
 
 Example: you want to run the MPI version on the small grid, you thus type ```./run.sh mpi small```, this is an extract of what you will get:
 ```
@@ -84,6 +103,8 @@ How does it work? As you have probably seen, there is a ```reference_outputs``` 
 * compare the final temperature change
 * compare the halo swap verification cell value (for MPI versions only)
 * compare the total time and give your speed-up
+
+Note: for small versions, do not pay attention to the speed-up. The purpose of the small version is solely debugging / testing. To have a shorter queueing time, the small version jobs use shared nodes. In other words, if someone is heavily using the node you are sharing, your program will logically become slower but not because of a sudden mistery inefficiency. Again, small version = debugging, if you want to evaluate and analyse performance, switch to the big grid.
 
 Example: you worked on the MPI version, you submitted it as follow: ```./submit.sh C mpi big my_mpi_big_results.txt```. To verify your output file, just type ```./verify.sh my_mpi_big_results.txt```. This is an example of what you could get:
 ```
