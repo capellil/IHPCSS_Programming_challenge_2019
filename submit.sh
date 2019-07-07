@@ -41,6 +41,18 @@ function is_in_array
     return $in
 }
 
+###########################################
+# Check that the right modules are loaded #
+###########################################
+if ! type "pgcc" > /dev/null 2>&1; then \
+	clear; \
+	echo -e "\n    . "; \
+	echo -e "   / \\"; \
+	echo -e "  / ! \\  It looks like the PGI compiler is not loaded."; \
+	echo -e " /_____\\ On Bridges please issue 'module load cuda/9.2 mpi/pgi_openmpi/19.4-nongpu'. You can now make again :)\n"; \
+	exit -1; \
+fi
+
 ######################
 # Display quick help #
 ######################
