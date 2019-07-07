@@ -13,7 +13,7 @@ You are taking part to the [International High-Performance Computing Summer Scho
   * [Submit to Bridges compute nodes](#submit-to-bridges-compute-nodes)
   * [Verification](#verification)
 * [What kind of optimisations are not allowed?](#what-kind-of-optimisations-are-not-allowed)
-* [Who do I talk to](#who-do-i-talk-to)
+* [Who do I talk to?](#who-do-i-talk-to)
 * [Acknowledgments](#acknowledgments)
 
 ## What is the challenge? ##
@@ -48,7 +48,7 @@ Note that you are strongly encouraged to work on the source files provided inste
 
 [Go back to table of contents](#table-of-contents)
 ### Compile the source codes ###
-There is a makefile as you can see; it will compile all versions (serial, OpenMP, MPI, OpenACC etc...) and generate the corresponding binaries in a folder ```bin```. OpenACC requires the PGI compiler, so we use the PGI compiler over all versions to keep things consistent. Make sure you load the right module with 'module load cuda/9.2 mpi/pgi_openmpi/19.4-nongpu' before making, if you do not, the makefile will remind you.
+There is a makefile as you can see; it will compile all versions (serial, OpenMP, MPI, OpenACC etc...) and generate the corresponding binaries in a folder ```bin```. OpenACC requires the PGI compiler, so we use the PGI compiler over all versions to keep things consistent. Make sure you load the right module with ```module load cuda/9.2 mpi/pgi_openmpi/19.4-nongpu``` before making, if you do not, the makefile will remind you.
 
 What happens behind the scene?
 
@@ -88,7 +88,8 @@ Example: you want to run the MPI version on the small grid, you thus type ```./r
 [SUCCESS] Command issued to run your application: "mpirun -n 4 ./bin/mpi_small"
 ```
 
-#### IMPORTANT ####
+**IMPORTANT**
+
 On Bridges, you should not run ```big``` grid calculations locally but on the compute nodes (see next section). The node on which you program is the login node, it is meant for people to ssh and send jobs to the compute nodes, not run programs. Running the ```small``` grid calculations, something that finishes in maximum 5 seconds is okay, but trying to run the ```big``` grid calculations, therefore using 100% of all CPUs for minutes is a good way to make the login node lag and every other user in a bad mood.
 
 [Go back to table of contents](#table-of-contents)
