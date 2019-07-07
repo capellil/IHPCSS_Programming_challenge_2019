@@ -7,4 +7,4 @@
 #SBATCH --res challenge
 #SBATCH -A ac560tp
 set -x
-./run.sh ${1} hybrid big ${2}
+./run.sh ${1} hybrid_cpu big ${2}
