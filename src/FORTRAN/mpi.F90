@@ -1,4 +1,4 @@
-!> @file serial.f90
+!> @file mpi.F90
 !> @brief Contains the MPI version of Laplace.
 !> @note This code was originaly written by John Urbanic for PSC 2014, later modified by Ludovic Capelli.
 !> @author John Urbanic

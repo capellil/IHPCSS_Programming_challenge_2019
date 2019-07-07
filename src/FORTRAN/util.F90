@@ -1,4 +1,4 @@
-!> @file util.h
+!> @file util.F90
 !> @brief This file contains the functions and variables that are common to all versions. It of course helps avoiding duplicate codes, but it also makes sure that all versions rely on an identical configuration.
 MODULE util
     #IFDEF VERSION_RUN_IS_MPI
