@@ -143,8 +143,10 @@ Example: you worked on the MPI version, you submitted it as follow: ```./submit.
 [Go back to table of contents](#table-of-contents)
 ## Who do I talk to? ##
 
-* Repository owner
-* IHPCSS Coding Challenge organisers
+* CAPELLI Ludovic
+* AASAWAT Tanuj Kr
+
+(Their email addresses are in the IHPCSS_Coding_challenge_intro.pdf file; next to last slide)
 
 [Go back to table of contents](#table-of-contents)
 ## Acknowledgments ##
