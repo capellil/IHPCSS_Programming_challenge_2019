@@ -13,6 +13,7 @@ You are taking part to the [International High-Performance Computing Summer Scho
   * [Submit to Bridges compute nodes](#submit-to-bridges-compute-nodes)
   * [Verification](#verification)
 * [What kind of optimisations are not allowed?](#what-kind-of-optimisations-are-not-allowed)
+* [Send your solution to the competition](#send-your-solution-to-the-competition)
 * [Who do I talk to?](#who-do-i-talk-to)
 * [Acknowledgments](#acknowledgments)
 
