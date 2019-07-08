@@ -137,6 +137,9 @@ Example: you worked on the MPI version, you submitted it as follow: ```./submit.
 ## What kind of optimisations are not allowed? ##
 
 * Changing the compilation process (that is: using different compilers, compiler flags, external libraries etc...). The point in this challenge is not for you to read hundreds of pages of documentation to find an extra flag people may have missed.
+* Changing the running process; provided scripts already use a sensible configuration. Again, you only have a few days; the objective of the hybrid challenge is for you to play with the code, not spend hours defining the best MPI / OpenMP ratio for instance.
+* Changing the submission process; such as using more than 4 nodes for instance.
+* Changing the algorithm; yes it is a naive one but it exposes good characteristics for you to practice what you have learned in OpenMP, MPI and OpenACC.
 * Reducing the amount of work to be done such as ignoring the cells whose value will be zero during the entire simulation.
 * Removing the track_progress from the loop or changing the frequency at which it prints.
 * Bypassing the buffer copy using a pointer swap.
