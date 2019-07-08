@@ -4,7 +4,7 @@ You are taking part to the [International High-Performance Computing Summer Scho
 
 ## Table of contents ##
 
-* [What is the challenge](#what-is-the-challenge)
+* [What is the challenge?](#what-is-the-challenge)
 * [What is this repository for?](#what-is-this-repository-for)
 * [How do I get set up?](#how-do-i-get-set-up)
   * [Download the source codes](#download-the-source-codes)
@@ -150,13 +150,13 @@ Example: you worked on the MPI version, you submitted it as follow: ```./submit.
 ## Send your solution to the competition ##
 Participating to the hybrid challenge is for fun; to practice what you have learned during the IHPCSS. But if you want to see how far you got, you can send your solution for it to be assessed and evaluated as part of the competition, and know if you managed to develop the fastest code of your category (CPU or GPU). By the way, the team who will have developed the fastest CPU solution will win the trophy shown at the last slide in the IHPCSS_Coding_challenge_intro.pdf file, and identically for the fastest GPU solution of course.
 
-If you want your solution to be assessed, send an email **by Friday 12th of July 2019 noon (Japan local time)** to CAPELLI Ludovic (email address in the IHPCSS_Coding_challenge_intro.pdf file; next to last slide) containing:
+If you want your solution to be assessed, send an email **by Friday 12th of July 2019 noon (Japan local time)** to CAPELLI Ludovic (email address in the ```IHPCSS_Coding_challenge_intro.pdf``` file; next to last slide) containing:
 * The full name of each team member (no more than 3 members per team remember), because if your team wins we need to know who we should call on stage :)
 * The source file of the version you optimised. Typically, it will certainly mean:
-  * hybrid_cpu.c (or hybrid_cpu.F90) if you focused on CPU using the MPI + OpenMP version. Possibly mpi.c (or mpi.F90) if you focused on CPU using the MPI only version instead.
-  * hybrid_gpu.c (or hybrid_gpu.F90) if you focused on GPU using the MPI + OpenACC version.
+  * ```hybrid_cpu.c``` (or ```hybrid_cpu.F90```) if you focused on CPU using the MPI + OpenMP version. Possibly ```mpi.c``` (or mpi.F90) if you focused on CPU using the MPI only version instead.
+  * ```hybrid_gpu.c``` (or ```hybrid_gpu.F90```) if you focused on GPU using the MPI + OpenACC version.
 
-**Note**: there is no need to send the makefile / run.sh / submit.sh scripts or else, send just the source file of the version you optimised. Your code will be compiled and run using the original makefile / run.sh / submit.sh scripts provided, on the ```big``` grid. This way, every participant has their code compiled & run in strictly identical conditions.
+**Note**: there is no need to send the ```makefile``` / ```run.sh``` / ```submit.sh``` scripts or else, send just the source file of the version you optimised. Your code will be compiled and run using the original ```makefile``` / ```run.sh``` / ```submit.sh``` scripts provided, on the ```big``` grid. This way, every participant has their code compiled & run in strictly identical conditions.
 
 **IMPORTANT ABOUT HARD DEADLINE**: solutions must be sent by Friday noon (so that you have a lot of time to play with the code) and at 2pm on Friday the winners are announced. In other words, all submissions must have been collected, run and verified within 2 hours, which is already challenging. Therefore, every email received **AFTER** Friday 12th of July 2019 noon (Japan local time) will be discarded. For the record, remember that you do not need to wait the very last minute to send your solution.
 
@@ -166,7 +166,7 @@ If you want your solution to be assessed, send an email **by Friday 12th of July
 * CAPELLI Ludovic
 * AASAWAT Tanuj Kr
 
-(Their email addresses are in the IHPCSS_Coding_challenge_intro.pdf file; next to last slide)
+(Their email addresses are in the ```IHPCSS_Coding_challenge_intro.pdf``` file; next to last slide)
 
 [Go back to table of contents](#table-of-contents)
 ## Acknowledgments ##
