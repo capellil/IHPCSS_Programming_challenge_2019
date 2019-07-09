@@ -5,7 +5,7 @@
 #SBATCH --ntasks-per-node 1
 #SBATCH --time=00:03:00
 #SBATCH --gres=gpu:p100:2
-#SBATCH --res challenge
+#SBATCH --res challengegpu
 #SBATCH -A ac560tp
 set -x
 module load cuda/9.2;
