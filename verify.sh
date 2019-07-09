@@ -10,6 +10,11 @@ function echo_bad
 	echo -e "\033[31m$1\033[0m\c"
 }
 
+function echo_warning
+{
+	echo -e "\033[33m$1\033[0m\c"
+}
+
 function echo_timing
 {
 	echo -e "\033[33m[TIMINGS]\033[0m $1"
@@ -26,6 +31,12 @@ function echo_failure
 	echo_bad "[FAILURE]"
 	echo " $1"
 	exit -1
+}
+
+function echo_difference
+{
+	echo_warning "[DIFFERS]"
+	echo " $1"
 }
 
 # Clear the screen to start with blank
@@ -102,7 +113,7 @@ max_error_challenger=`cat "${challenger_file}" | grep "iteration" | cut -d ' ' -
 if [ "${max_error_reference}" = "${max_error_challenger}" ]; then
 	echo_success "The final maximum change in temperature is ${max_error_reference} for both."
 else
-	echo_failure "The final maximum changes in temperature are different; ${max_error_reference} for the reference file vs ${max_error_challenger} for the file to verify."
+	echo_difference "The final maximum changes in temperature are different; ${max_error_reference} for the reference file vs ${max_error_challenger} for the file to verify."
 fi
 
 # Check the max error
@@ -111,7 +122,7 @@ halo_swap_verification_challenger=`cat "${challenger_file}" | grep "verification
 if [ "${halo_swap_verification_reference}" = "${halo_swap_verification_challenger}" ]; then
 	echo_success "The halo swap verification cell value is ${halo_swap_verification_reference} for both."
 else
-	echo_failure "The halo swap verification cell values are different; ${halo_swap_verification_reference} for the reference file vs ${halo_swap_verification_challenger} for the file to verify."
+	echo_difference "The halo swap verification cell values are different; ${halo_swap_verification_reference} for the reference file vs ${halo_swap_verification_challenger} for the file to verify."
 fi
 
 # Compare times
