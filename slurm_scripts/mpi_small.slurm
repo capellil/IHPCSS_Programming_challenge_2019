@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH --nodes=1
-#SBATCH --partition=RM-shared
+#SBATCH --partition=RM
 #SBATCH --ntasks-per-node 4
 #SBATCH --time=00:00:30
 #SBATCH --res challenge
