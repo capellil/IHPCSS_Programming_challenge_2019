@@ -1,6 +1,6 @@
 /**
- * @file serial.c
- * @brief Contains the serial version of Laplace.
+ * @file openacc.c
+ * @brief Contains the OpenACC version of Laplace.
  * @note This code was originaly written by John Urbanic for PSC 2014, later modified by Ludovic Capelli.
  * @author John Urbanic
  * @author Ludovic Capelli
