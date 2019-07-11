@@ -139,7 +139,7 @@ PROGRAM serial
     ! Print the halo swap verification cell value 
     CALL MPI_Barrier(MPI_COMM_WORLD, ierr);
     IF (my_rank .eq. comm_size - 2) THEN
-        WRITE (*, '(A, I0, A, I0, A, F21.18)'), "Value of halo swap verification cell (", ROWS - 1, ", ", COLUMNS_GLOBAL - COLUMNS - 1, ") is ", temperature(ROWS,COLUMNS)
+        WRITE (*, '(A, I0, A, I0, A, F21.18)'), "Value of halo swap verification cell (", ROWS - 1, ",", COLUMNS_GLOBAL - COLUMNS - 1, ") is ", temperature(ROWS,COLUMNS)
     ENDIF
 
     CALL MPI_Finalize(ierr)

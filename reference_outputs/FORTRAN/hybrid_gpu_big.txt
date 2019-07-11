@@ -42,4 +42,4 @@ Language used: FORTRAN.
 Version run: hybrid_gpu_big.
 The maximum temperature change was reached at iteration 3586 was 0.009996974375376055
 Total time was 940.1 seconds.
-Value of halo swap verification cell (14559, 12739) is 85.851525286739885701
+Value of halo swap verification cell (14559,12739) is 85.851525286739885701

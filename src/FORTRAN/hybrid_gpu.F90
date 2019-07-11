@@ -37,6 +37,7 @@ PROGRAM serial
     INTEGER :: status(MPI_STATUS_SIZE)
     !> The rank of my MPI process on the local node
     INTEGER :: my_local_rank
+    INTEGER :: local_comm
     !> Number of GPUs detected
     INTEGER :: number_of_acc_devices
     INTEGER(acc_device_kind) :: acc_device_type
@@ -45,6 +46,9 @@ PROGRAM serial
     CALL MPI_Init(ierr)
     CALL MPI_Comm_size(MPI_COMM_WORLD, comm_size, ierr)
     CALL MPI_Comm_rank(MPI_COMM_WORLD, my_rank, ierr)
+
+    CALL MPI_Comm_split_type(MPI_COMM_WORLD, MPI_COMM_TYPE_SHARED, 0, MPI_INFO_NULL, local_comm, ierr);
+    CALL MPI_Comm_rank(local_comm, my_local_rank, ierr);
 
     IF (VERSION_RUN .eq. "mpi_small" .and. comm_size /= 2) THEN
         WRITE (*, '(A, I0, A)'), "The small version is meant to be run with 2 MPI processes, not ", comm_size, "."
@@ -153,7 +157,7 @@ PROGRAM serial
     ! Print the halo swap verification cell value 
     CALL MPI_Barrier(MPI_COMM_WORLD, ierr);
     IF (my_rank .eq. comm_size - 2) THEN
-        WRITE (*, '(A, I0, A, I0, A, F21.18)'), "Value of halo swap verification cell (", ROWS - 1, ", ", COLUMNS_GLOBAL - COLUMNS - 1, ") is ", temperature(ROWS,COLUMNS)
+        WRITE (*, '(A, I0, A, I0, A, F21.18)'), "Value of halo swap verification cell (", ROWS - 1, ",", COLUMNS_GLOBAL - COLUMNS - 1, ") is ", temperature(ROWS,COLUMNS)
     ENDIF
 
     CALL MPI_Finalize(ierr)

@@ -39,4 +39,4 @@ Language used: FORTRAN.
 Version run: hybrid_cpu_small.
 The maximum temperature change was reached at iteration 3264 was 0.009998997198444215
 Total time was 4.7 seconds.
-Value of halo swap verification cell (671, 335) is 49.012659745246594412
+Value of halo swap verification cell (671,335) is 49.012659745246594412
